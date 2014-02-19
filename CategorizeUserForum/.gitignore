@@ -1,0 +1,10 @@
+*.class
+*.iml
+*.ipr
+*.iws
+*.error
+*.log
+*.classpath
+*.project
+.settings/
+target/
