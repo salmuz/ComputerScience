@@ -36,13 +36,43 @@
  *
  */
 
-package org.montp2.m1decol.ter.jobs;
+package org.montp2.m1decol.ter;
 
-public abstract class Task implements Runnable {
+import org.annolab.tt4j.TreeTaggerException;
+import org.montp2.m1decol.ter.utils.FileUtils;
 
-    public abstract void execution() throws Exception;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-    public void run() {
+public class PreProcessing {
+
+    private Lemmatisation lemma = Lemmatisation.getInstance();
+
+    private void splitWordsByFile(String path,Map<String,Integer> keys) throws IOException, TreeTaggerException {
+
+        for(TreeTaggerWordWrapper word : lemma.execution(path)){
+            if(!word.isINV()){
+               Integer value = keys.get(word.getWord());
+               if(value == null) value = 0;
+               keys.put(word.getWord(),++value);
+            }
+        }
 
     }
+
+    public Map<String,Integer> splitWords(String path) throws IOException, TreeTaggerException{
+        Map<String,Integer> keys = new HashMap<String, Integer>();
+        if (FileUtils.isFile(path)) {
+            splitWordsByFile(path,keys);
+        } else {
+            for (File subpath : FileUtils.ls(path)) {
+                System.out.println(subpath);
+                splitWordsByFile(subpath.getAbsolutePath(),keys);
+            }
+        }
+        return keys;
+    }
+
 }

@@ -45,9 +45,9 @@ import java.io.IOException;
 public class TestMain {
 
     public static void main(String ... arg){
-        Lemmatisation lema = Lemmatisation.getInstance();
+        PreProcessing pre = new PreProcessing();
         try {
-            lema.execution();
+            System.out.println(pre.splitWords("/Users/user/Downloads/TER/test/usetes/"));
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (TreeTaggerException e) {

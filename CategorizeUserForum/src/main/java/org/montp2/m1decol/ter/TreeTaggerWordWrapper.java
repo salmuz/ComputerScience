@@ -38,37 +38,68 @@
 
 package org.montp2.m1decol.ter;
 
+import java.util.regex.Pattern;
+
+import static org.montp2.m1decol.ter.utils.Constants.tagsINV;
+import static org.montp2.m1decol.ter.utils.Constants.subtagsINV;
+
 public class TreeTaggerWordWrapper {
 
     private String word;
     private String tag;
     private String lemma;
 
-    public TreeTaggerWordWrapper() {
+    private String subTag;
+    private boolean isINV;
 
+    public TreeTaggerWordWrapper(String word, String tag, String lemma) {
+        this.lemma = lemma;
+        this.tag = tag;
+        this.word = word;
+        this.subTag = "";
+        this.isINV = false;
+        preprocessing();
     }
 
-/*class TreeTaggerWordWrapper:
-    def __init__(self, triplet):
-    self.word,self.tag,self.lemma = triplet
-    self.subTag=''
-    tags=self.tag.split(":")
-            if len(tags) > 1 :
-    self.tag=tags[0]
-    self.subTag=tags[1]
+    private void preprocessing(){
+        String []tags = this.tag.split(":");
 
-            if self.lemma != "<unknown>" :
-    self.word = self.lemma
+        if (tags.length > 1){
+            this.tag = tags[0];
+            this.subTag = tags[1];
+        }
 
-    self.isINV = False
-    tagINV = ['PUN','NUM','PRP','SENT','ADV']
-    subtagINV = ['DEM','PER','REL','POS']
-            # INVALID
+        if(!this.lemma.equals("<unknown>") &&
+                !lemma.contains("|")){
+            this.word = this.lemma;
+        }
 
-    if self.tag in tagINV or self.subTag in subtagINV:
-    self.isINV = True
-    else:
-    regexp = re.compile(r'([/|(|)|?|«|*|;|#|+|@|,|"|.|>|=|…|♥|!|^|0-9]|-t-)')
-            if regexp.search(self.word) is not None:
-    self.isINV=True     */
+        if(tagsINV.contains(this.tag) || subtagsINV.contains(this.subTag)){
+            this.isINV = true;
+        }else{
+            Pattern regexp = Pattern.compile("([/|(|)|?|«|*|;|#|+|@|,|\"|.|>|=|…|♥|!|^|0-9]|-t-)");
+            if(regexp.matcher(this.word).matches()){
+                this.isINV = true;
+            }
+        }
+    }
+
+    public boolean isINV() {
+        return isINV;
+    }
+
+    public String getWord() {
+        return word;
+    }
+
+    @Override
+    public String toString() {
+        return "TreeTaggerWordWrapper{" +
+                "isINV=" + isINV +
+                ", lemma='" + lemma + '\'' +
+                ", subTag='" + subTag + '\'' +
+                ", tag='" + tag + '\'' +
+                ", word='" + word + '\'' +
+                '}';
+    }
 }

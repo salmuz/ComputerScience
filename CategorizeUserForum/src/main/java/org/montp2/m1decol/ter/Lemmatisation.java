@@ -77,14 +77,15 @@ package org.montp2.m1decol.ter;
 import org.annolab.tt4j.TokenHandler;
 import org.annolab.tt4j.TreeTaggerException;
 import org.annolab.tt4j.TreeTaggerWrapper;
-import org.montp2.m1decol.ter.jobs.Task;
 import org.montp2.m1decol.ter.utils.Constants;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import static java.util.Arrays.asList;
-
-public class Lemmatisation extends Task {
+public class Lemmatisation{
 
     private static class Holder {
         static final Lemmatisation INSTANCE = new Lemmatisation();
@@ -94,23 +95,41 @@ public class Lemmatisation extends Task {
         return Holder.INSTANCE;
     }
 
-    private Lemmatisation(){
+    private Lemmatisation() {
         System.setProperty("treetagger.home", Constants.HOME_TREETAGER);
     }
 
-    public void execution() throws IOException,TreeTaggerException{
+    public List<TreeTaggerWordWrapper> execution(String pathFile) throws IOException, TreeTaggerException {
 
-        TreeTaggerWrapper tt = new TreeTaggerWrapper<String>();
+        TreeTaggerWrapper taggerWrapper = new TreeTaggerWrapper<String>();
+        final List<TreeTaggerWordWrapper> wordWrappers = new ArrayList<TreeTaggerWordWrapper>();
         try {
-            tt.setModel(Constants.TREETAGGER_LANGUAGE);
-            tt.setHandler(new TokenHandler<String>() {
-                public void token(String token, String pos, String lemma) {
-                    System.out.println(token + "\t" + pos + "\t" + lemma);
+            taggerWrapper.setModel(Constants.TREETAGGER_LANGUAGE);
+            taggerWrapper.setHandler(new TokenHandler<String>() {
+                public void token(String token, String tag, String lemma) {
+                    TreeTaggerWordWrapper word = new TreeTaggerWordWrapper(token, tag, lemma);
+                    wordWrappers.add(word);
                 }
             });
-            tt.process(asList(new String[] { "This", "is", "a", "test", "." }));
-        }finally {
-            tt.destroy();
+            taggerWrapper.process(readLinesOfFile(pathFile));
+        } finally {
+            taggerWrapper.destroy();
         }
+        return wordWrappers;
+    }
+
+    private List<String> readLinesOfFile(String filename) throws IOException {
+        FileReader fileReader = new FileReader(filename);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        List<String> lines = new ArrayList<String>();
+        String line = null;
+        while ((line = bufferedReader.readLine()) != null) {
+            for (String item : line.split("[^\\p{L}]+")) {
+                if (item.length() > 1)
+                    lines.add(item);
+            }
+        }
+        bufferedReader.close();
+        return lines;
     }
 }

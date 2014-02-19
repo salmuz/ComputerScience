@@ -38,16 +38,18 @@
 
 package org.montp2.m1decol.ter.utils;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-public final class Constants {
+public class FileUtils {
 
-    public static final String HOME_TREETAGER = "/Users/user/Applications/tree-tagger/";
+    public static List<File> ls(String path) {
+        File ls = new File(path);
+        return Arrays.asList(ls.listFiles());
+    }
 
-    public static final String TREETAGGER_LANGUAGE = "/Users/user/Applications/tree-tagger/lib/french-utf8.par";
-
-    public static final List<String> tagsINV = Arrays.asList(new String[]{"PUN", "NUM", "PRP", "SENT", "ADV"});
-
-    public static final List<String> subtagsINV = Arrays.asList(new String[]{"DEM","PER","REL","POS"});
+    public static boolean isFile(String path) {
+        return new File(path).isFile();
+    }
 }
