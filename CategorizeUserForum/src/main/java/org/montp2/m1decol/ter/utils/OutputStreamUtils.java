@@ -4,7 +4,7 @@
  * 
  * salmuz : Carranza Alarcon Yonatan Carlos
  * 
- * (C) Copyright 2013, by salmuz and Contributors.
+ * (C) Copyright 2014, by salmuz and Contributors.
  * 
  * Project Info:  https://github.com/salmuz/Graphes_Multi_Plateformes
  * Project Creator:  salmuz (https://www.assembla.com/spaces/salmuz-java) 
@@ -26,7 +26,7 @@
  * ------------------
  * Point.java
  * ------------------
- * (C) Copyright 2013, by salmuz and Contributors
+ * (C) Copyright 2014, by salmuz and Contributors
  *
  * Original Author: Carranza Alarcon Yonatan Carlos
  * Contributor(s):  
@@ -38,29 +38,24 @@
 
 package org.montp2.m1decol.ter.utils;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
-public final class FileUtils {
+public final class OutputStreamUtils{
 
-    public static List<File> ls(String path) {
-        File ls = new File(path);
-        return Arrays.asList(ls.listFiles());
+    private static final String ENCODING = "UTF-8";
+
+    public static void writeSimple(String data,String path) throws FileNotFoundException, UnsupportedEncodingException {
+        PrintWriter writer = new PrintWriter(path, ENCODING);
+        writer.println(data);
+        writer.close();
     }
 
-    public static boolean isFile(String path) {
-        return new File(path).isFile();
-    }
-
-    public static boolean isDirectory(String path) {
-        return new File(path).isDirectory();
-    }
-
-    public static boolean removeFile(String path) {
-        if (isDirectory(path))
-            throw  new UnsupportedOperationException("by directory");
-
-        return new File(path).delete();
+    public static void writeSimple(String []lines,String path) throws FileNotFoundException, UnsupportedEncodingException {
+        PrintWriter writer = new PrintWriter(path, ENCODING);
+        for(String data : lines)
+            writer.println(data);
+        writer.close();
     }
 }

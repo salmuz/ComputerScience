@@ -4,7 +4,7 @@
  * 
  * salmuz : Carranza Alarcon Yonatan Carlos
  * 
- * (C) Copyright 2013, by salmuz and Contributors.
+ * (C) Copyright 2014, by salmuz and Contributors.
  * 
  * Project Info:  https://github.com/salmuz/Graphes_Multi_Plateformes
  * Project Creator:  salmuz (https://www.assembla.com/spaces/salmuz-java) 
@@ -26,7 +26,7 @@
  * ------------------
  * Point.java
  * ------------------
- * (C) Copyright 2013, by salmuz and Contributors
+ * (C) Copyright 2014, by salmuz and Contributors
  *
  * Original Author: Carranza Alarcon Yonatan Carlos
  * Contributor(s):  
@@ -36,31 +36,16 @@
  *
  */
 
-package org.montp2.m1decol.ter.utils;
+package org.montp2.m1decol.ter.exception;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
+import java.io.IOException;
 
-public final class FileUtils {
-
-    public static List<File> ls(String path) {
-        File ls = new File(path);
-        return Arrays.asList(ls.listFiles());
+public class ProcessingException extends IOException {
+    public ProcessingException(String message) {
+        super(message);    //To change body of overridden methods use File | Settings | File Templates.
     }
 
-    public static boolean isFile(String path) {
-        return new File(path).isFile();
-    }
-
-    public static boolean isDirectory(String path) {
-        return new File(path).isDirectory();
-    }
-
-    public static boolean removeFile(String path) {
-        if (isDirectory(path))
-            throw  new UnsupportedOperationException("by directory");
-
-        return new File(path).delete();
+    public ProcessingException() {
+        super();    //To change body of overridden methods use File | Settings | File Templates.
     }
 }

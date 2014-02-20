@@ -4,7 +4,7 @@
  * 
  * salmuz : Carranza Alarcon Yonatan Carlos
  * 
- * (C) Copyright 2013, by salmuz and Contributors.
+ * (C) Copyright 2014, by salmuz and Contributors.
  * 
  * Project Info:  https://github.com/salmuz/Graphes_Multi_Plateformes
  * Project Creator:  salmuz (https://www.assembla.com/spaces/salmuz-java) 
@@ -26,7 +26,7 @@
  * ------------------
  * Point.java
  * ------------------
- * (C) Copyright 2013, by salmuz and Contributors
+ * (C) Copyright 2014, by salmuz and Contributors
  *
  * Original Author: Carranza Alarcon Yonatan Carlos
  * Contributor(s):  
@@ -38,29 +38,32 @@
 
 package org.montp2.m1decol.ter.utils;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-public final class FileUtils {
+public final class MapUtils {
 
-    public static List<File> ls(String path) {
-        File ls = new File(path);
-        return Arrays.asList(ls.listFiles());
-    }
+    /**
+     * source : http://stackoverflow.com/questions/109383/how-to-sort-a-mapkey-value-on-the-values-in-java
+     * auteur: Carter Page
+     *
+     * @param map
+     * @param <K>
+     * @param <V>
+     * @return
+     */
+    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
+        List<Map.Entry<K, V>> list = new LinkedList<Map.Entry<K, V>>(map.entrySet());
 
-    public static boolean isFile(String path) {
-        return new File(path).isFile();
-    }
+        Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
+            public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
 
-    public static boolean isDirectory(String path) {
-        return new File(path).isDirectory();
-    }
-
-    public static boolean removeFile(String path) {
-        if (isDirectory(path))
-            throw  new UnsupportedOperationException("by directory");
-
-        return new File(path).delete();
+        Map<K, V> result = new LinkedHashMap<K, V>();
+        for (Map.Entry<K, V> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
     }
 }

@@ -1,5 +1,5 @@
 /* ==========================================
- * GrapheMultiPlateforme : a free Java graph-theory library
+ * CategorizeUserForum : a free Java graph-theory library
  * ==========================================
  * 
  * salmuz : Carranza Alarcon Yonatan Carlos
@@ -26,7 +26,7 @@
  * ------------------
  * Point.java
  * ------------------
- * (C) Copyright 2013, by salmuz and Contributors
+ * (C) Copyright 2014, by salmuz and Contributors
  *
  * Original Author: Carranza Alarcon Yonatan Carlos
  * Contributor(s):  

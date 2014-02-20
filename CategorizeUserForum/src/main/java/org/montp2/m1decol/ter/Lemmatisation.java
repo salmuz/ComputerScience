@@ -4,7 +4,7 @@
  * 
  * salmuz : Carranza Alarcon Yonatan Carlos
  * 
- * (C) Copyright 2013, by salmuz and Contributors.
+ * (C) Copyright 2014, by salmuz and Contributors.
  * 
  * Project Info:  https://github.com/salmuz/Graphes_Multi_Plateformes
  * Project Creator:  salmuz (https://www.assembla.com/spaces/salmuz-java) 
@@ -26,7 +26,7 @@
  * ------------------
  * Point.java
  * ------------------
- * (C) Copyright 2013, by salmuz and Contributors
+ * (C) Copyright 2014, by salmuz and Contributors
  *
  * Original Author: Carranza Alarcon Yonatan Carlos
  * Contributor(s):  

@@ -4,7 +4,7 @@
  * 
  * salmuz : Carranza Alarcon Yonatan Carlos
  * 
- * (C) Copyright 2013, by salmuz and Contributors.
+ * (C) Copyright 2014, by salmuz and Contributors.
  * 
  * Project Info:  https://github.com/salmuz/Graphes_Multi_Plateformes
  * Project Creator:  salmuz (https://www.assembla.com/spaces/salmuz-java) 
@@ -26,7 +26,7 @@
  * ------------------
  * Point.java
  * ------------------
- * (C) Copyright 2013, by salmuz and Contributors
+ * (C) Copyright 2014, by salmuz and Contributors
  *
  * Original Author: Carranza Alarcon Yonatan Carlos
  * Contributor(s):  
@@ -38,29 +38,33 @@
 
 package org.montp2.m1decol.ter.utils;
 
-import java.io.File;
-import java.util.Arrays;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
-public final class FileUtils {
+public final class InputStreamUtils {
 
-    public static List<File> ls(String path) {
-        File ls = new File(path);
-        return Arrays.asList(ls.listFiles());
+    public static List<String> readByLine(String path) throws IOException {
+        FileReader fileReader = new FileReader(path);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        List<String> lines = new ArrayList<String>();
+        String line = null;
+        while ((line = bufferedReader.readLine()) != null) {
+            lines.add(line.trim());
+        }
+        bufferedReader.close();
+        return lines;
     }
 
-    public static boolean isFile(String path) {
-        return new File(path).isFile();
-    }
-
-    public static boolean isDirectory(String path) {
-        return new File(path).isDirectory();
-    }
-
-    public static boolean removeFile(String path) {
-        if (isDirectory(path))
-            throw  new UnsupportedOperationException("by directory");
-
-        return new File(path).delete();
+    public static String readInputStream(InputStream stderr) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        InputStreamReader isr = new InputStreamReader(stderr);
+        BufferedReader br = new BufferedReader(isr);
+        String line = null;
+        while ((line = br.readLine()) != null) {
+            builder.append(line);
+        }
+        return builder.toString();
     }
 }
+
