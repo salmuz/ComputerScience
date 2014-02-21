@@ -56,6 +56,10 @@ public final class InputStreamUtils {
         return lines;
     }
 
+    public static String readInputStream(String path) throws IOException {
+        return readInputStream(new FileInputStream(path));
+    }
+
     public static String readInputStream(InputStream stderr) throws IOException {
         StringBuilder builder = new StringBuilder();
         InputStreamReader isr = new InputStreamReader(stderr);

@@ -38,25 +38,20 @@
 
 package org.montp2.m1decol.ter;
 
-import org.annolab.tt4j.TreeTaggerException;
-
-import java.io.IOException;
-import java.util.List;
-
 public class TestMain {
 
     public static void main(String... arg) {
+        String DATA = "/Users/user/Downloads/TER/test/usetes/";
         GlobalPreProcessing pre = new GlobalPreProcessing();
         UniGramsPreProcessing uni = new UniGramsPreProcessing();
         try {
-            List<String> stopwords = pre.getWordsMostOrLeastFrequentOfCorpus("/Users/user/Downloads/TER/test/users/",1000,4);
-            uni.loadStopWordsFromFile("/Users/user/Dropbox/MasterM1_DECOL/Semestre02/ProjetTER/TER_NLP/source/motvides.txt",stopwords);
-            uni.convertToFileLemmatised("/Users/user/Downloads/TER/test/users/", "/Users/user/Downloads/TER/test/users_lemma/");
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (TreeTaggerException e) {
+//            List<String> stopwords = pre.getWordsMostOrLeastFrequentOfCorpus(DATA, 1000, 4);
+//            uni.loadStopWordsFromFile("/Users/user/Dropbox/MasterM1_DECOL/Semestre02/ProjetTER/TER_NLP/source/motvides.txt", stopwords);
+//            uni.convertToFileLemmatised(DATA, "/Users/user/Downloads/TER/test/usetes_lemma/");
+            //uni.createFileARFF("/Users/user/Downloads/TER/test/users_lemma/","/Users/user/Downloads/TER/test/CategorizeUserForum.arff");
+            //uni.indexingToVector("/Users/user/Downloads/TER/test/CategorizeUserForum.arff","/Users/user/Downloads/TER/test/CategorizeUserForum.vector.arff");
+            uni.clusteringKMeans("/Users/user/Downloads/TER/test/CategorizeUserForum.vector.arff");
+        } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 

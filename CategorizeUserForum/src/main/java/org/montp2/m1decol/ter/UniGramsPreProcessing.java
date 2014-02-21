@@ -44,8 +44,16 @@ import org.montp2.m1decol.ter.exception.NotFileException;
 import org.montp2.m1decol.ter.utils.FileUtils;
 import org.montp2.m1decol.ter.utils.InputStreamUtils;
 import org.montp2.m1decol.ter.utils.OutputStreamUtils;
+import weka.clusterers.SimpleKMeans;
+import weka.core.*;
+import weka.core.tokenizers.WordTokenizer;
+import weka.filters.Filter;
+import weka.core.converters.ArffLoader;
+import weka.filters.unsupervised.attribute.StringToWordVector;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,13 +61,13 @@ import java.util.List;
 public class UniGramsPreProcessing {
 
     private Lemmatisation lemmatisation = Lemmatisation.getInstance();
-    private List<String>  stopWords;
+    private List<String> stopWords;
 
     public UniGramsPreProcessing() {
         stopWords = new ArrayList<String>();
     }
 
-    public void loadStopWordsFromFile(String path,List<String> otherStopWords) throws IOException {
+    public void loadStopWordsFromFile(String path, List<String> otherStopWords) throws IOException {
         loadStopWordsFromFile(path);
         stopWords.addAll(otherStopWords);
     }
@@ -90,7 +98,83 @@ public class UniGramsPreProcessing {
         }
     }
 
-    public void generateFileArff(String inPath){
+    public void createFileARFF(String inPath, String outPath) throws IOException {
+
+        FastVector atts = new FastVector(1);
+        atts.addElement(new Attribute("data", (FastVector) null));
+        Instances data = new Instances("CategorizeUserForum", atts, 0);
+
+        for (File file : FileUtils.ls(inPath)) {
+            double[] newInstance = new double[1];
+            newInstance[0] = (double) data.attribute(0).addStringValue(InputStreamUtils.readInputStream(file.getAbsolutePath()));
+            data.add(new Instance(1.0, newInstance));
+        }
+
+        OutputStreamUtils.writeSimple(data.toString(), outPath);
+
+    }
+
+
+    private Instances loadARFF(String path) throws IOException {
+        BufferedReader reader = null;
+        Instances inputInstances = null;
+        try {
+            reader = new BufferedReader(new FileReader(path));
+            ArffLoader.ArffReader arff = new ArffLoader.ArffReader(reader);
+            inputInstances = arff.getData();
+        } finally {
+            if (reader != null) reader.close();
+        }
+        return inputInstances;
+    }
+
+    public void indexingToVector(String inPath,String outPath) throws Exception {
+
+        WordTokenizer wordTokenizer = new WordTokenizer();
+        wordTokenizer.setDelimiters("\r \t.,;:'\"()?!");
+
+        Instances inputInstances = loadARFF(inPath);
+        StringToWordVector filter = new StringToWordVector();
+        filter.setInputFormat(inputInstances);
+        filter.setDoNotOperateOnPerClassBasis(false);
+        filter.setInvertSelection(false);
+        filter.setLowerCaseTokens(true);
+        filter.setMinTermFreq(3);
+        filter.setOutputWordCounts(true);
+        filter.setTokenizer(wordTokenizer);
+        filter.setUseStoplist(true);
+        filter.setWordsToKeep(15000);
+
+        Instances outputInstances = Filter.useFilter(inputInstances,filter);
+
+        OutputStreamUtils.writeSimple(outputInstances.toString(), outPath);
+    }
+
+
+    public void clusteringKMeans(String inPath)throws Exception {
+
+        Instances inputInstances = loadARFF(inPath);
+
+        EuclideanDistance euclideanDistance = new EuclideanDistance();
+        euclideanDistance.setAttributeIndices("first-last");
+        euclideanDistance.setDontNormalize(false);
+        euclideanDistance.setInvertSelection(false);
+
+        SimpleKMeans kmeans = new SimpleKMeans();
+        kmeans.setPreserveInstancesOrder(true);
+        kmeans.setMaxIterations(1000);
+        kmeans.setNumClusters(4);
+        kmeans.setSeed(10);
+        kmeans.buildClusterer(inputInstances);
+
+        int[] assignments = kmeans.getAssignments();
+
+        int i=0;
+        for(int clusterNum : assignments) {
+            System.out.printf("Instance %d -> Cluster %d", i, clusterNum);
+            System.out.println();
+            i++;
+        }
 
     }
 
