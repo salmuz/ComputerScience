@@ -92,6 +92,7 @@ public class TreeTaggerWordWrapper {
         return word;
     }
 
+
     @Override
     public String toString() {
         return "TreeTaggerWordWrapper{" +

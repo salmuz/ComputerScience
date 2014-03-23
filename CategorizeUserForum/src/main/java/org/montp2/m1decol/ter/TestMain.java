@@ -41,16 +41,16 @@ package org.montp2.m1decol.ter;
 public class TestMain {
 
     public static void main(String... arg) {
-        String DATA = "/Users/user/Downloads/TER/test/usetes/";
+        String DATA = "/Users/user/Downloads/TER/test/users/";
         GlobalPreProcessing pre = new GlobalPreProcessing();
         UniGramsPreProcessing uni = new UniGramsPreProcessing();
         try {
-//            List<String> stopwords = pre.getWordsMostOrLeastFrequentOfCorpus(DATA, 1000, 4);
-//            uni.loadStopWordsFromFile("/Users/user/Dropbox/MasterM1_DECOL/Semestre02/ProjetTER/TER_NLP/source/motvides.txt", stopwords);
-//            uni.convertToFileLemmatised(DATA, "/Users/user/Downloads/TER/test/usetes_lemma/");
-            //uni.createFileARFF("/Users/user/Downloads/TER/test/users_lemma/","/Users/user/Downloads/TER/test/CategorizeUserForum.arff");
-            //uni.indexingToVector("/Users/user/Downloads/TER/test/CategorizeUserForum.arff","/Users/user/Downloads/TER/test/CategorizeUserForum.vector.arff");
-            uni.clusteringKMeans("/Users/user/Downloads/TER/test/CategorizeUserForum.vector.arff");
+            //List<String> stopwords = pre.getWordsMostOrLeastFrequentOfCorpus(DATA, Integer.MAX_VALUE, 4);
+            //uni.loadStopWordsFromFile("/Users/user/Dropbox/MasterM1_DECOL/Semestre02/ProjetTER/TER_NLP/source/motvides.txt", stopwords);
+            //uni.convertToFileLemmatised(DATA, "/Users/user/Downloads/TER/test/users_lemma/");
+            uni.createFileARFF("/Users/user/Downloads/TER/test/users_lemma_v2/","/Users/user/Downloads/TER/test/CategorizeUserForumV3.arff");
+            //uni.indexingToBoleean("/Users/user/Downloads/TER/test/CategorizeUserForumV3.arff","/Users/user/Downloads/TER/test/CategorizeUserForum.bool.v3.arff");
+            //uni.clusteringKMeans("/Users/user/Downloads/TER/test/CategorizeUserForum.bool.v3.arff");
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

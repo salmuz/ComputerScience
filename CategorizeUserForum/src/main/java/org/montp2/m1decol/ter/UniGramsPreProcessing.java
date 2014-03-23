@@ -44,11 +44,12 @@ import org.montp2.m1decol.ter.exception.NotFileException;
 import org.montp2.m1decol.ter.utils.FileUtils;
 import org.montp2.m1decol.ter.utils.InputStreamUtils;
 import org.montp2.m1decol.ter.utils.OutputStreamUtils;
+import weka.clusterers.ClusterEvaluation;
 import weka.clusterers.SimpleKMeans;
 import weka.core.*;
+import weka.core.converters.ArffLoader;
 import weka.core.tokenizers.WordTokenizer;
 import weka.filters.Filter;
-import weka.core.converters.ArffLoader;
 import weka.filters.unsupervised.attribute.StringToWordVector;
 
 import java.io.BufferedReader;
@@ -128,7 +129,29 @@ public class UniGramsPreProcessing {
         return inputInstances;
     }
 
-    public void indexingToVector(String inPath,String outPath) throws Exception {
+    public void indexingToBoleean(String inPath, String outPath) throws Exception {
+
+        WordTokenizer wordTokenizer = new WordTokenizer();
+        wordTokenizer.setDelimiters("\r \t.,;:'\"()?!");
+
+        Instances inputInstances = loadARFF(inPath);
+        StringToWordVector filter = new StringToWordVector();
+        filter.setInputFormat(inputInstances);
+        filter.setDoNotOperateOnPerClassBasis(false);
+        filter.setInvertSelection(false);
+        filter.setLowerCaseTokens(true);
+        filter.setOutputWordCounts(false);
+        filter.setTokenizer(wordTokenizer);
+        filter.setUseStoplist(true);
+        filter.setWordsToKeep(15000);
+
+        Instances outputInstances = Filter.useFilter(inputInstances, filter);
+
+        OutputStreamUtils.writeSimple(outputInstances.toString(), outPath);
+    }
+
+
+    public void indexingToVector(String inPath, String outPath) throws Exception {
 
         WordTokenizer wordTokenizer = new WordTokenizer();
         wordTokenizer.setDelimiters("\r \t.,;:'\"()?!");
@@ -145,15 +168,42 @@ public class UniGramsPreProcessing {
         filter.setUseStoplist(true);
         filter.setWordsToKeep(15000);
 
-        Instances outputInstances = Filter.useFilter(inputInstances,filter);
+        Instances outputInstances = Filter.useFilter(inputInstances, filter);
 
         OutputStreamUtils.writeSimple(outputInstances.toString(), outPath);
     }
 
 
-    public void clusteringKMeans(String inPath)throws Exception {
+    public void indexingToVectorIDFT(String inPath, String outPath) throws Exception {
+
+        WordTokenizer wordTokenizer = new WordTokenizer();
+        wordTokenizer.setDelimiters("\r \t.,;:'\"()?!");
 
         Instances inputInstances = loadARFF(inPath);
+        StringToWordVector filter = new StringToWordVector();
+        filter.setInputFormat(inputInstances);
+        filter.setIDFTransform(true);
+        filter.setTFTransform(true);
+        filter.setDoNotOperateOnPerClassBasis(false);
+        filter.setInvertSelection(false);
+        filter.setLowerCaseTokens(true);
+        filter.setMinTermFreq(3);
+        filter.setOutputWordCounts(true);
+        filter.setTokenizer(wordTokenizer);
+        filter.setUseStoplist(true);
+        filter.setWordsToKeep(15000);
+
+        Instances outputInstances = Filter.useFilter(inputInstances, filter);
+
+        OutputStreamUtils.writeSimple(outputInstances.toString(), outPath);
+    }
+
+
+    public void clusteringKMeans(String inPath) throws Exception {
+
+        Instances inputInstances = loadARFF(inPath);
+
+        ClusterEvaluation eval = new ClusterEvaluation();
 
         EuclideanDistance euclideanDistance = new EuclideanDistance();
         euclideanDistance.setAttributeIndices("first-last");
@@ -161,20 +211,19 @@ public class UniGramsPreProcessing {
         euclideanDistance.setInvertSelection(false);
 
         SimpleKMeans kmeans = new SimpleKMeans();
-        kmeans.setPreserveInstancesOrder(true);
+        kmeans.setPreserveInstancesOrder(false);
+        kmeans.setDontReplaceMissingValues(false);
+        kmeans.setDisplayStdDevs(false);
         kmeans.setMaxIterations(1000);
-        kmeans.setNumClusters(4);
+        kmeans.setNumClusters(7);
         kmeans.setSeed(10);
+        kmeans.setDistanceFunction(euclideanDistance);
         kmeans.buildClusterer(inputInstances);
 
-        int[] assignments = kmeans.getAssignments();
+        eval.setClusterer(kmeans);
+        eval.evaluateClusterer(inputInstances);
+        System.out.println(eval.clusterResultsToString());
 
-        int i=0;
-        for(int clusterNum : assignments) {
-            System.out.printf("Instance %d -> Cluster %d", i, clusterNum);
-            System.out.println();
-            i++;
-        }
 
     }
 
