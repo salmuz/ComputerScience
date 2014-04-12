@@ -38,34 +38,16 @@
 
 package org.montp2.m1decol.ter.utils;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.Map;
+public class JDBCUtils {
 
-public final class OutputStreamUtils{
-
-    private static final String ENCODING = "UTF-8";
-
-    public static void writeSimple(String data,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        writer.println(data);
-        writer.close();
+    public static String preparePlaceHolders(int length) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < length;) {
+            builder.append("?");
+            if (++i < length) {
+                builder.append(",");
+            }
+        }
+        return builder.toString();
     }
-
-    public static void writeSimple(String []lines,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        for(String data : lines)
-            writer.println(data);
-        writer.close();
-    }
-
-    public static void writeSimpleMap(Map<? extends Object,? extends Object> values,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        for(Map.Entry entry : values.entrySet())
-            writer.println(entry.getKey().toString()+":"+entry.getValue().toString());
-        writer.close();
-    }
-
-
 }

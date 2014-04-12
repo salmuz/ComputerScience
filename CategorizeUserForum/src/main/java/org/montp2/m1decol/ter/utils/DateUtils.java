@@ -38,34 +38,15 @@
 
 package org.montp2.m1decol.ter.utils;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
-public final class OutputStreamUtils{
+public class DateUtils {
 
-    private static final String ENCODING = "UTF-8";
-
-    public static void writeSimple(String data,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        writer.println(data);
-        writer.close();
+    public static String currentDate(String format,Locale locale ){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, locale);
+        simpleDateFormat.setLenient(false);
+        return simpleDateFormat.format(new Date());
     }
-
-    public static void writeSimple(String []lines,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        for(String data : lines)
-            writer.println(data);
-        writer.close();
-    }
-
-    public static void writeSimpleMap(Map<? extends Object,? extends Object> values,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        for(Map.Entry entry : values.entrySet())
-            writer.println(entry.getKey().toString()+":"+entry.getValue().toString());
-        writer.close();
-    }
-
-
 }

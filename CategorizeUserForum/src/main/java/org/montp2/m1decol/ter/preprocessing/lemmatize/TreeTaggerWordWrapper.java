@@ -34,9 +34,43 @@
  * Changes
  * -------
  *
+ * Documentation
+ * 	  ABR	abreviation
+ * 	  ADJ	adjective
+ * 	  ADV	adverb
+ * 	  DET:ART	article
+ * 	  DET:POS	possessive pronoun (ma, ta, ...)
+ * 	  INT	interjection
+ * 	  KON	conjunction
+ * 	  NAM	proper name
+ * 	  NOM	noun
+ * 	  NUM	numeral
+ * 	  PRO	pronoun
+ * 	  PRO:DEM	demonstrative pronoun
+ * 	  PRO:IND	indefinite pronoun
+ * 	  PRO:PER	personal pronoun
+ * 	  PRO:POS	possessive pronoun (mien, tien, ...)
+ * 	  PRO:REL	relative pronoun
+ * 	  PRP	preposition
+ * 	  PRP:det	preposition plus article (au,du,aux,des)
+ * 	  PUN	punctuation
+ * 	  PUN:cit	punctuation citation
+ * 	  SENT	sentence tag
+ * 	  SYM	symbol
+ * 	  VER:cond	verb conditional
+ * 	  VER:futu	verb futur
+ * 	  VER:impe	verb imperative
+ * 	  VER:impf	verb imperfect
+ * 	  VER:infi	verb infinitive
+ * 	  VER:pper	verb past participle
+ * 	  VER:ppre	verb present participle
+ * 	  VER:pres	verb present
+ * 	  VER:simp	verb simple past
+ * 	  VER:subi	verb subjunctive imperfect
+ * 	  VER:subp	verb subjunctive present
  */
 
-package org.montp2.m1decol.ter;
+package org.montp2.m1decol.ter.preprocessing.lemmatize;
 
 import java.util.regex.Pattern;
 
@@ -69,11 +103,18 @@ public class TreeTaggerWordWrapper {
             this.subTag = tags[1];
         }
 
-        if(!this.lemma.equals("<unknown>") &&
-                !lemma.contains("|")){
-            this.word = this.lemma;
+        if(!this.lemma.equals("<unknown>")){
+            if(!lemma.contains("|")){
+                this.word = this.lemma;
+            }else{
+               // Il y a deux mots comme lemma, alors on choisit le deuxieme (On n'est vraiment pas qu'il est le meilleur)
+               String []lemmas = this.lemma.split("\\|");
+               this.word = lemmas[1];
+
+            }
         }
 
+        // morpho-syntaxique
         if(tagsINV.contains(this.tag) || subtagsINV.contains(this.subTag)){
             this.isINV = true;
         }else{

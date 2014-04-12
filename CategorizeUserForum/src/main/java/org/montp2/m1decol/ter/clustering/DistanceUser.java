@@ -36,36 +36,51 @@
  *
  */
 
-package org.montp2.m1decol.ter.utils;
+package org.montp2.m1decol.ter.clustering;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.Map;
+public class DistanceUser implements Comparable<DistanceUser>{
+    private double distance;
+    private int identifier;
 
-public final class OutputStreamUtils{
-
-    private static final String ENCODING = "UTF-8";
-
-    public static void writeSimple(String data,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        writer.println(data);
-        writer.close();
+    public DistanceUser(int identifier, double dist) {
+        this.distance = dist;
+        this.identifier = identifier;
     }
 
-    public static void writeSimple(String []lines,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        for(String data : lines)
-            writer.println(data);
-        writer.close();
+    public int compareTo(DistanceUser o) {
+        return new Double(distance).compareTo(o.distance);
     }
 
-    public static void writeSimpleMap(Map<? extends Object,? extends Object> values,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        for(Map.Entry entry : values.entrySet())
-            writer.println(entry.getKey().toString()+":"+entry.getValue().toString());
-        writer.close();
+    public double getDistance() {
+        return distance;
     }
 
+    public int getIdentifier() {
+        return identifier;
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DistanceUser)) return false;
+
+        DistanceUser distUsers = (DistanceUser) o;
+
+        if (identifier != distUsers.identifier) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return identifier;
+    }
+
+    @Override
+    public String toString() {
+        return "DistanceUser{" +
+                "distance=" + distance +
+                ", identifier=" + identifier +
+                '}';
+    }
 }

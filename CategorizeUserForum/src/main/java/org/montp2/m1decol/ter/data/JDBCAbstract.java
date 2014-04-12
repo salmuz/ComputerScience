@@ -36,36 +36,31 @@
  *
  */
 
-package org.montp2.m1decol.ter.utils;
+package org.montp2.m1decol.ter.data;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.Map;
+import org.montp2.m1decol.ter.data.exception.JDBCException;
 
-public final class OutputStreamUtils{
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-    private static final String ENCODING = "UTF-8";
+public abstract class JDBCAbstract{
 
-    public static void writeSimple(String data,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        writer.println(data);
-        writer.close();
+    private static final String DRIVER  = "org.postgresql.Driver";
+    private static final String URL     = "jdbc:postgresql://localhost/TER";
+    private static final String USER    = "cartser";
+    private static final String PASWORD = "cartser";
+
+    protected Connection connection() throws JDBCException{
+        Connection connection = null;
+        try{
+            Class.forName(DRIVER);
+            connection = DriverManager.getConnection(URL, USER, PASWORD);
+        }catch(ClassNotFoundException cfe){
+            throw new JDBCException(cfe);
+        }catch (SQLException se){
+            throw new JDBCException(se);
+        }
+        return connection;
     }
-
-    public static void writeSimple(String []lines,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        for(String data : lines)
-            writer.println(data);
-        writer.close();
-    }
-
-    public static void writeSimpleMap(Map<? extends Object,? extends Object> values,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        for(Map.Entry entry : values.entrySet())
-            writer.println(entry.getKey().toString()+":"+entry.getValue().toString());
-        writer.close();
-    }
-
-
 }

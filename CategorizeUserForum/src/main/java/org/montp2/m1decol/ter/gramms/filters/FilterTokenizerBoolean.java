@@ -36,36 +36,39 @@
  *
  */
 
-package org.montp2.m1decol.ter.utils;
+package org.montp2.m1decol.ter.gramms.filters;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.Map;
+import org.montp2.m1decol.ter.gramms.FilterTokenizer;
+import org.montp2.m1decol.ter.utils.OutputStreamUtils;
+import org.montp2.m1decol.ter.utils.WekaUtils;
+import weka.core.Instances;
+import weka.core.tokenizers.WordTokenizer;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.StringToWordVector;
 
-public final class OutputStreamUtils{
+public class FilterTokenizerBoolean implements FilterTokenizer{
 
-    private static final String ENCODING = "UTF-8";
+    public void indexingToTokenizer(String inPath, String outPath) throws Exception {
+        WordTokenizer wordTokenizer = new WordTokenizer();
+        wordTokenizer.setDelimiters("\r \t.,;:'\"()?!");
 
-    public static void writeSimple(String data,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        writer.println(data);
-        writer.close();
+        Instances inputInstances = WekaUtils.loadARFF(inPath);
+        StringToWordVector filter = new StringToWordVector();
+        filter.setInputFormat(inputInstances);
+        filter.setDoNotOperateOnPerClassBasis(false);
+        filter.setInvertSelection(false);
+        filter.setLowerCaseTokens(true);
+        filter.setOutputWordCounts(false);
+        filter.setTokenizer(wordTokenizer);
+        filter.setUseStoplist(true);
+        filter.setWordsToKeep(200);
+
+        Instances outputInstances = Filter.useFilter(inputInstances, filter);
+
+        OutputStreamUtils.writeSimple(outputInstances.toString(), outPath);
     }
 
-    public static void writeSimple(String []lines,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        for(String data : lines)
-            writer.println(data);
-        writer.close();
+    public String typeFilter() {
+        return "bool";
     }
-
-    public static void writeSimpleMap(Map<? extends Object,? extends Object> values,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        for(Map.Entry entry : values.entrySet())
-            writer.println(entry.getKey().toString()+":"+entry.getValue().toString());
-        writer.close();
-    }
-
-
 }

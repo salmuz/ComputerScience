@@ -38,34 +38,15 @@
 
 package org.montp2.m1decol.ter.utils;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.Map;
+public final class NGramProperties {
 
-public final class OutputStreamUtils{
-
-    private static final String ENCODING = "UTF-8";
-
-    public static void writeSimple(String data,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        writer.println(data);
-        writer.close();
-    }
-
-    public static void writeSimple(String []lines,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        for(String data : lines)
-            writer.println(data);
-        writer.close();
-    }
-
-    public static void writeSimpleMap(Map<? extends Object,? extends Object> values,String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path, ENCODING);
-        for(Map.Entry entry : values.entrySet())
-            writer.println(entry.getKey().toString()+":"+entry.getValue().toString());
-        writer.close();
-    }
-
+    public static String RAW_DATA_PATH      = "RAW_DATA_PATH";
+    public static String STOP_WORD_PATH     = "STOP_WORD_PATH";
+    public static String LEMMA_DATA_PATH    = "LEMMA_DATA_PATH";
+    public static String ARFF_FILE_PATH     = "ARFF_FILE_PATH";
+    public static String NAME_ARFF          = "NAME_ARFF";
+    public static String ARFF_PATH          = "ARFF_PATH";
+    public static String EXCLUDE_FILE       = "EXCLUDE_FILE";
+    public static String OTHER_STOP_WORDS   = "OTHER_STOP_WORDS";
 
 }
