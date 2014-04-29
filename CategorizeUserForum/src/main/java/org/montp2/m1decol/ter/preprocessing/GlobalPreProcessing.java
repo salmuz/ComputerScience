@@ -183,6 +183,30 @@ public class GlobalPreProcessing {
             intersections = CollectionUtils.intersection(intersections,list.get(i));
         }
 
+
+        /*Set<String> val = new HashSet<String>();
+        int ix = list.size()-1;
+        int n;
+        for (int i = 0; i < list.size(); i++) {
+            Collection<String> intersections2 = null;
+            if(ix != 0){
+                intersections2 = list.get(0);
+                n = 0;
+            }else{
+                intersections2 = list.get(1);
+                n = 1;
+            }
+            for (int j = 0; j < list.size(); j++) {
+                if(ix != j && n != j){
+                    intersections = CollectionUtils.intersection(intersections2,list.get(j));
+                }
+            }
+            ix--;
+            val.addAll(intersections2);
+        }
+
+        intersections.addAll(val);    */
+
         return intersections;
     }
 }

@@ -53,13 +53,26 @@ public class JDBCPostgreSQL extends JDBCAbstract {
 
     protected static final String USER_IN_FORUM_SELECT =
             " select distinct t.id_for " +
-            " from website w " +
-                " inner join forum f on f.id_web = w.id_web" +
-                " inner join topic t on t.id_for = f.id_for" +
-                " inner join message m on m.id_top = t.id_top" +
-            " where w.id_web = 1" +
-              " and m.id_aut IN (%s)";
+                    " from website w " +
+                    " inner join forum f on f.id_web = w.id_web" +
+                    " inner join topic t on t.id_for = f.id_for" +
+                    " inner join message m on m.id_top = t.id_top" +
+                    " where w.id_web = 1" +
+                    " and m.id_aut IN (%s)";
 
+
+    protected static final String _SELECT =
+            " select id_for, 100*count/(sum(count) over()),count " +
+                    " from ( select tbl.id_for, count(id_for) as count " +
+                    "           from " +
+                    "               (select distinct m.id_aut,t.id_for " +
+                    "                from website w " +
+                    "                   inner join forum f on f.id_web = w.id_web" +
+                    "                   inner join topic t on t.id_for = f.id_for " +
+                    "                   inner join message m on m.id_top = t.id_top " +
+                    "                where w.id_web = 1 " +
+                    "                   and m.id_aut in (%s)) as tbl " +
+                    "        group by tbl.id_for ) a";
 
     public List<String> forumsBelongUsers(List<String> users) throws JDBCException {
         PreparedStatement pStmt = null;
@@ -73,8 +86,8 @@ public class JDBCPostgreSQL extends JDBCAbstract {
                 pStmt.setInt(i++, Integer.parseInt(item));
             }
             ResultSet rs = pStmt.executeQuery();
-            while (rs.next()){
-                forums.add(rs.getString(1)+"");
+            while (rs.next()) {
+                forums.add(rs.getString(1) + "");
             }
         } catch (SQLException se) {
             throw new JDBCException(se);

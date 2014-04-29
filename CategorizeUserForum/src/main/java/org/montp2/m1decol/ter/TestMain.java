@@ -87,15 +87,19 @@ public class TestMain {
 
     public static void computeClustering() throws Exception {
         Clustering clu = new KMeansClustering();
-        clu.computeClustering("/Users/user/Downloads/TER/test/CategorizeUserForum12042014112801bool.arff",
-                "/Users/user/Downloads/TER/test/Kmeans.model");
+        clu.computeClustering("/Users/user/Downloads/TER/test/bool1.arff",
+                "/Users/user/Downloads/TER/test/Kmeans2.model");
         NearestNeighbor near = new NearestNeighbor();
-        near.computeNearestNeighbor("/Users/user/Downloads/TER/test/CategorizeUserForum12042014112801bool.arff",
-                "/Users/user/Downloads/TER/test/Kmeans.model",
-                "/Users/user/Downloads/TER/test/nearNeighbor.txt");
+        /*near.computeNearestNeighbor("/Users/user/Downloads/TER/test/bool1.arff",
+                "/Users/user/Downloads/TER/test/Kmeans2.model",
+                "/Users/user/Downloads/TER/test/nearNeighbor2.txt");*/
     }
 
     public static void main(String... arg) throws Exception {
+
+        //computeUniGramme();
+        computeFrecuency("/Users/user/Downloads/TER/test/cfreq_7.txt",
+               "/Users/user/Downloads/TER/test/cluster_7.txt",false);
         /*UniGramsPreProcessing uni = new UniGramsPreProcessing(new FilterTokenizerBoolean());
         uni.computeLemmatization("/Users/user/Downloads/TER/test/forums/",
                 "/Users/user/Downloads/TER/test/forums_lemma/",STOP_WORD,false);*/
@@ -105,21 +109,32 @@ public class TestMain {
         }
         GlobalPreProcessing pre = new GlobalPreProcessing();
         System.out.println(pre.intersectVocabulary("/Users/user/Downloads/TER/test/forums_lemma/"));*/
-        //computeUniGramme();
+
         //computeFrecuency("/Users/user/Downloads/TER/test/freq1.txt",DATA);
         //computeFrecuency("/Users/user/Downloads/TER/test/freq2.txt",DATA_LEMMA,false);
 
         /*UniGramsPreProcessing pre = new UniGramsPreProcessing(new FilterTokenizerBoolean());
-        pre.computeLemmatization("/Users/user/Downloads/AVIS_HOTELS_Tripadvisor/Excellent/",STOP_WORD);
-        pre.computeLemmatization("/Users/user/Downloads/AVIS_HOTELS_Tripadvisor/Horrible/",STOP_WORD);
-        pre.computeLemmatization("/Users/user/Downloads/AVIS_HOTELS_Tripadvisor/Moyen/",STOP_WORD);
-        */
+        pre.computeLemmatization("/Users/user/Downloads/AVIS_HOTELS_Tripadvisor/Excellent/","/Users/user/Downloads/TER/test/stopwords.txt");
+        pre.computeLemmatization("/Users/user/Downloads/AVIS_HOTELS_Tripadvisor/Horrible/","/Users/user/Downloads/TER/test/stopwords.txt");
+        pre.computeLemmatization("/Users/user/Downloads/AVIS_HOTELS_Tripadvisor/Moyen/","/Users/user/Downloads/TER/test/stopwords.txt");*/
+
+//        Clustering clu = new XMeansClustering();
+//        clu.computeClustering("/Users/user/Downloads/TER/test/bool1.arff",
+//                "/Users/user/Downloads/TER/test/Xmeans2.model");
+        // System.out.println(new GlobalPreProcessing().intersectVocabulary(FORUMS));
+        //computeUniGramme();
+
+       /* NearestNeighbor near = new NearestNeighbor();
+        near.computeNearestNeighbor("/Users/user/Downloads/TER/test/weka_6.arff",
+                "/Users/user/Downloads/TER/test/weka_6.model",
+                "/Users/user/Downloads/TER/test/nearNeighbor2.txt");*/
 
         JDBCPostgreSQL jdbc = new JDBCPostgreSQL();
-        for(String line : InputStreamUtils.readByLine("/Users/user/Downloads/TER/test/nearNeighbor.txt")){
+        for(String line : InputStreamUtils.readByLine("/Users/user/Downloads/TER/test/nearNeighbor2.txt")){
             if(line.isEmpty()) break;
             String [] users = line.split(":")[1].split(",");
             System.out.println(jdbc.forumsBelongUsers(new ArrayList<String>(Arrays.asList(users))));
         }
+        //new GlobalPreProcessing().intersectVocabulary(FORUMS);
     }
 }
