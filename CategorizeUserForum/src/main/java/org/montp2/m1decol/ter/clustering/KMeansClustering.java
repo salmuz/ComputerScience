@@ -44,9 +44,14 @@ import weka.clusterers.SimpleKMeans;
 import weka.core.EuclideanDistance;
 import weka.core.Instances;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class KMeansClustering implements Clustering {
 
-    public Clusterer computeClustering(String inPath,String outPath) throws Exception {
+    public Clusterer computeClustering(String inPath, String outPath) throws Exception {
         Instances inputInstances = WekaUtils.loadARFF(inPath);
 
         EuclideanDistance euclideanDistance = new EuclideanDistance();
@@ -64,8 +69,7 @@ public class KMeansClustering implements Clustering {
         kmeans.setDistanceFunction(euclideanDistance);
         kmeans.buildClusterer(inputInstances);
 
-
-        WekaUtils.saveModel(kmeans,outPath);
+        WekaUtils.saveModel(kmeans, outPath);
 
         /*
         *
@@ -78,5 +82,31 @@ public class KMeansClustering implements Clustering {
         * */
 
         return kmeans;
-     }
+    }
+
+    public Map<Integer, List<Integer>> computeInstanceByCluster(String arffFilter, String inModel,
+                                                                Map<Integer, Integer> arffToIdUser) throws Exception {
+
+        SimpleKMeans kmeans = WekaUtils.loadModel(inModel);
+
+        Instances data = new Instances(WekaUtils.loadARFF(arffFilter));
+
+        int[] clusters = kmeans.getAssignments();
+
+        Map<Integer, List<Integer>> idUserByCluster = new HashMap<Integer, List<Integer>>();
+
+        for (int i = 0; i < data.numInstances(); i++) {
+            int ind = clusters[i];
+
+            List<Integer> users = idUserByCluster.get(ind);
+            if (users == null) {
+                users = new ArrayList<Integer>();
+                idUserByCluster.put(ind, users);
+            }
+            users.add(arffToIdUser.get(i));
+        }
+
+        return idUserByCluster;
+
+    }
 }

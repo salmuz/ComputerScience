@@ -50,7 +50,6 @@ import java.util.List;
 
 public class JDBCPostgreSQL extends JDBCAbstract {
 
-
     protected static final String USER_IN_FORUM_SELECT =
             " select distinct t.id_for " +
                     " from website w " +
@@ -73,6 +72,46 @@ public class JDBCPostgreSQL extends JDBCAbstract {
                     "                where w.id_web = 1 " +
                     "                   and m.id_aut in (%s)) as tbl " +
                     "        group by tbl.id_for ) a";
+
+    protected static final String USER_FREQUENTS_BY_FORUM =
+                    "   select distinct tbl.id_aut from " +
+                    "             (select m.id_aut, " +
+                    "                           f.id_for, " +
+                    "                           count(*) over( partition by  m.id_aut) as nbposte " +
+                    "                      from website w\n" +
+                    "                        inner join forum f on f.id_web = w.id_web " +
+                    "                        inner join topic t on t.id_for = f.id_for " +
+                    "                        inner join message m on m.id_top = t.id_top " +
+                    "                    where w.id_web = 1" +
+                    "                    group by m.id_aut, f.id_for) as tbl " +
+                    "                where nbposte = %s ";
+
+    public List<String> usersVeryFrequentsByForum(int MIN, int MAX) throws JDBCException {
+
+        List<String> userExclude = new ArrayList<String>();
+        PreparedStatement pStmt = null;
+        Connection con = connection();
+        try {
+            con.setAutoCommit(true);
+            for (int i = MIN; i <= MAX; i++) {
+                pStmt = con.prepareCall(String.format(USER_FREQUENTS_BY_FORUM));
+                pStmt.setInt(1, i);
+                ResultSet rs = pStmt.executeQuery();
+                while (rs.next()) {
+                    userExclude.add(rs.getString(1));
+                }
+            }
+        } catch (SQLException se) {
+            throw new JDBCException(se);
+        } finally {
+            try {
+                con.commit();
+                con.close();
+            } catch (SQLException sq) {
+            }
+        }
+        return userExclude;
+    }
 
     public List<String> forumsBelongUsers(List<String> users) throws JDBCException {
         PreparedStatement pStmt = null;

@@ -38,7 +38,6 @@
 
 package org.montp2.m1decol.ter.clustering;
 
-import org.montp2.m1decol.ter.utils.OutputStreamUtils;
 import org.montp2.m1decol.ter.utils.WekaUtils;
 import weka.clusterers.SimpleKMeans;
 import weka.core.EuclideanDistance;
@@ -51,9 +50,9 @@ public class NearestNeighbor {
    public NearestNeighbor(){
    }
 
-   public void computeNearestNeighbor(String arffData,String inFile, String outFile,Map<Integer,Integer> arffToUser) throws Exception {
+   public Map<Integer, List<DistanceUser>> computeNearestNeighbor(String arffData,String inModel,Map<Integer, Integer> arffToIdUser) throws Exception {
 
-       SimpleKMeans kmeans = WekaUtils.loadModel(inFile);
+       SimpleKMeans kmeans = WekaUtils.loadModel(inModel);
 
        EuclideanDistance eclidean = (EuclideanDistance) kmeans.getDistanceFunction();
 
@@ -68,8 +67,6 @@ public class NearestNeighbor {
            nearUser.put(i,new ArrayList<DistanceUser>());
        }
 
-       Map<Integer,List<Integer>> userByCluster = new HashMap<Integer, List<Integer>>();
-
        for (int i = 0; i < data.numInstances(); i++) {
            int ind = clusters[i];
            double dist = eclidean.distance(clusterCentroid.instance(ind), data.instance(i));
@@ -83,43 +80,15 @@ public class NearestNeighbor {
                    nears.set(maxIndex,new DistanceUser(i,dist));
                }
            }
-
-           List<Integer>  users = userByCluster.get(ind);
-           if(users == null) {
-               users = new ArrayList<Integer>();
-               userByCluster.put(ind,users);
-           }
-           users.add(i);
        }
 
-       StringBuilder builder = new StringBuilder();
        for (Map.Entry<Integer,List<DistanceUser>> item: nearUser.entrySet()){
-           builder.append(item.getKey());
-           builder.append(":");
-           builder.append(item.getValue().get(0).getIdentifier());
-           for (int i=1;i<item.getValue().size();i++){
-               DistanceUser user = item.getValue().get(i);
-               builder.append(",");
-               builder.append(arffToUser.get(user.getIdentifier()));
+           for (DistanceUser user :item.getValue()){
+               user.setIdentifier(arffToIdUser.get(user.getIdentifier()));
            }
-           builder.append("\n");
        }
 
-       StringBuilder builder2 = new StringBuilder();
-       for(Map.Entry<Integer,List<Integer>> item: userByCluster.entrySet()){
-           builder2.append(item.getKey());
-           builder2.append(":");
-           builder2.append(arffToUser.get(item.getValue().get(0)));
-           for (int i=1;i<item.getValue().size();i++){
-               builder2.append(",");
-               builder2.append(arffToUser.get(item.getValue().get(i)));
-           }
-           builder2.append("\n");
-       }
-
-       OutputStreamUtils.writeSimple(builder2.toString(), outFile);
-
-       //OutputStreamUtils.writeSimple(builder.toString(),outFile);
+       return nearUser;
    }
 
 }

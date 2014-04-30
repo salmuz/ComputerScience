@@ -137,12 +137,16 @@ public class UniGramsPreProcessing implements GramsPreProcessing {
 
         String nameArff = properties.getProperty(NGramProperties.ARFF_FILE_PATH);
 
-        if (nameArff == null)
+        if (nameArff == null){
             nameArff = properties.getProperty(NGramProperties.ARFF_PATH) + File.separator +
                     properties.getProperty(NGramProperties.NAME_ARFF) +
                     DateUtils.currentDate("ddMMyyyyHHmmss", Locale.FRANCE);
-        else
+        }else{
             nameArff = nameArff.replace(WekaUtils.EXTENSION_ARFF, "");
+        }
+
+        properties.setProperty(NGramProperties.NAME_ARFF,nameArff);
+        properties.setProperty(NGramProperties.ARFF_FILE_PATH, nameArff + WekaUtils.EXTENSION_ARFF);
 
         WekaUtils.createARFF(properties.getProperty(NGramProperties.LEMMA_DATA_PATH),
                 nameArff + WekaUtils.EXTENSION_ARFF, (List<String>) properties.get(NGramProperties.EXCLUDE_FILE));

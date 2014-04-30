@@ -67,5 +67,36 @@ public final class OutputStreamUtils{
         writer.close();
     }
 
+    public void saveMap(){
+        StringBuilder builder2 = new StringBuilder();
+       /* for (Map.Entry<Integer, List<Integer>> item : userByCluster.entrySet()) {
+            builder2.append(item.getKey());
+            builder2.append(":");
+            builder2.append(arffToUser.get(item.getValue().get(0)));
+            for (int i = 1; i < item.getValue().size(); i++) {
+                builder2.append(",");
+                builder2.append(arffToUser.get(item.getValue().get(i)));
+            }
+            builder2.append("\n");
+        }
+        StringBuilder builder = new StringBuilder();
+
+       for (Map.Entry<Integer,List<DistanceUser>> item: nearUser.entrySet()){
+           builder.append(item.getKey());
+           builder.append(":");
+           builder.append(item.getValue().get(0).getIdentifier());
+           for (int i=1;i<item.getValue().size();i++){
+               DistanceUser user = item.getValue().get(i);
+               builder.append(",");
+               builder.append(arffToUser.get(user.getIdentifier()));
+           }
+           builder.append("\n");
+       }
+
+
+        */
+
+    }
+
 
 }

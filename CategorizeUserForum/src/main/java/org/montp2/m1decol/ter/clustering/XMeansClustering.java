@@ -46,6 +46,8 @@ import weka.core.Instance;
 import weka.core.Instances;
 
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
 
 public class XMeansClustering  implements Clustering {
 
@@ -78,11 +80,12 @@ public class XMeansClustering  implements Clustering {
             System.out.println(cluster_num);
         }
 
-
-
-
         WekaUtils.saveModel(xmeans,outPath);
         
         return xmeans;
+    }
+
+    public Map<Integer, List<Integer>> computeInstanceByCluster(String arffData, String inModel, Map<Integer, Integer> arffToIdUser) throws Exception {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

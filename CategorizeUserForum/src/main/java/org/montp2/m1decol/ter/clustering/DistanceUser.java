@@ -59,6 +59,10 @@ public class DistanceUser implements Comparable<DistanceUser>{
         return identifier;
     }
 
+    public void setIdentifier(int identifier) {
+        this.identifier = identifier;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

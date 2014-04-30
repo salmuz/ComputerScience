@@ -62,12 +62,20 @@ public final class InputStreamUtils {
 
     public static String readInputStream(InputStream stderr) throws IOException {
         StringBuilder builder = new StringBuilder();
-        InputStreamReader isr = new InputStreamReader(stderr);
-        BufferedReader br = new BufferedReader(isr);
-        String line = null;
-        while ((line = br.readLine()) != null) {
-            builder.append(line);
+        InputStreamReader isr = null;
+        BufferedReader br = null;
+        try {
+            isr = new InputStreamReader(stderr);
+            br = new BufferedReader(isr);
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                builder.append(line);
+            }
+        } finally {
+            isr.close();
+            br.close();
         }
+
         return builder.toString();
     }
 }

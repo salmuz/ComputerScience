@@ -40,6 +40,9 @@ package org.montp2.m1decol.ter.clustering;
 
 import weka.clusterers.Clusterer;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created with IntelliJ IDEA.
  * User: salmuz
@@ -49,6 +52,23 @@ import weka.clusterers.Clusterer;
  */
 public interface Clustering {
 
+    /**
+     *
+     * @param inPath
+     * @param outPath
+     * @return
+     * @throws Exception
+     */
     public Clusterer computeClustering(String inPath,String outPath) throws Exception;
+
+    /**
+     *
+     * @param arffData
+     * @param inModel
+     * @param arffToIdUser Position of id user in the file arff
+     * @return
+     * @throws Exception
+     */
+    public Map<Integer, List<Integer>> computeInstanceByCluster(String arffData,String inModel, Map<Integer, Integer> arffToIdUser) throws Exception;
 
 }

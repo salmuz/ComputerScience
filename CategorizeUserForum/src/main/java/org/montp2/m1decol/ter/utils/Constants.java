@@ -46,13 +46,6 @@ public final class Constants {
     public static final String HOME_TREETAGER = "/Users/user/Applications/tree-tagger/";
 
     public static final String TREETAGGER_LANGUAGE = "/Users/user/Applications/tree-tagger/lib/french-utf8.par";
-    //public static final String TREETAGGER_LANGUAGE = "/Users/user/Applications/tree-tagger/lib/english.par";
-
-    public static final List<String> tagsENVAL = Arrays.asList(new String[]{"JJ","JJR","JJS","NN","NNS"});
-
-    public static final List<String> tagsAdjEN = Arrays.asList(new String[]{"JJ","JJR","JJS"});
-
-    public static final List<String> tagsNNEN = Arrays.asList(new String[]{"NN","NNS"});
 
     public static final List<String> tagsINV = Arrays.asList(new String[]{"PUN", "NUM", "PRP", "SENT", "ADV"});
 
