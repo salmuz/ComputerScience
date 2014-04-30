@@ -36,45 +36,40 @@
  *
  */
 
-package org.montp2.m1decol.ter.data;
+package org.montp2.m1decol.ter.business;
 
+import org.montp2.m1decol.ter.data.JDBCAbstract;
 import org.montp2.m1decol.ter.data.exception.JDBCException;
+import org.montp2.m1decol.ter.utils.Constants;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public abstract class JDBCAbstract{
+public class ForumBusinness extends AbstractBusiness {
 
-    private static final String DRIVER  = "org.postgresql.Driver";
-    private static final String URL     = "jdbc:postgresql://localhost/TER";
-    private static final String USER    = "cartser";
-    private static final String PASWORD = "cartser";
+    private JDBCAbstract jdbc = JDBCAbstract.instance();
 
-    protected Connection connection() throws JDBCException{
-        Connection connection = null;
-        try{
-            Class.forName(DRIVER);
-            connection = DriverManager.getConnection(URL, USER, PASWORD);
-        }catch(ClassNotFoundException cfe){
-            throw new JDBCException(cfe);
-        }catch (SQLException se){
-            throw new JDBCException(se);
+    @Override
+    public List<String> getUserPostInMinAndMaxForum(int minUserToPost, int maxUserToPost, String prefixFile, String suffixFile) throws JDBCException {
+        List<String> userExcludes = new ArrayList<String>();
+        for (String idUser : jdbc.usersVeryFrequentsByForum(minUserToPost, maxUserToPost)) {
+            userExcludes.add(prefixFile + idUser + suffixFile);
         }
-        return connection;
+
+        userExcludes.addAll(Constants.userEmpty);
+        return userExcludes;
     }
 
-    private static class Holder {
-        static final JDBCAbstract INSTANCE = new JDBCPostgreSQL();
+    @Override
+    public List<String> forumsBelongUsers(List<Integer> users) throws JDBCException {
+        return jdbc.forumsBelongUsers(users);
     }
 
-    public static JDBCAbstract instance() {
-        return Holder.INSTANCE;
+    @Override
+    public List<String> forumsBelongUsers(Integer idUser) throws JDBCException {
+        return this.forumsBelongUsers(new ArrayList<Integer>(Arrays.asList(new Integer[]{idUser})));
     }
 
-    public abstract List<String> usersVeryFrequentsByForum(int MIN, int MAX) throws JDBCException;
-
-    public abstract List<String> forumsBelongUsers(List<Integer> users) throws JDBCException;
 
 }

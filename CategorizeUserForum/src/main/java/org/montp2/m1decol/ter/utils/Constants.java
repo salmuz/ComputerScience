@@ -51,6 +51,11 @@ public final class Constants {
 
     public static final List<String> subtagsINV = Arrays.asList(new String[]{"DEM","PER","REL","POS"});
 
+
+    public static final List<String> userEmpty = Arrays.asList(new String[]{
+            "user_640.txt","user_277.txt","user_61.txt","user_646.txt","user_364" // vide
+    });
+
     // il faut l'extraire de la base de données, on l'a fait avec python :)
     public static final List<String> userExclude = Arrays.asList(new String[]{
             //2
@@ -99,6 +104,6 @@ public final class Constants {
             "user_1.txt","user_2.txt","user_6.txt","user_9.txt","user_12.txt","user_21.txt","user_27.txt","user_168.txt","user_209.txt", //10
             "user_3.txt","user_7.txt","user_10.txt","user_13.txt","user_14.txt","user_22.txt","user_30.txt", // 11
             "user_5.txt","user_8.txt","user_11.txt","user_31.txt","user_32.txt","user_33.txt","user_34.txt", // 12
-            "user_640.txt","user_277.txt","user_61.txt","user_646.txt","user_364" // vide
+
              });
 }

@@ -36,45 +36,18 @@
  *
  */
 
-package org.montp2.m1decol.ter.data;
+package org.montp2.m1decol.ter.business;
 
 import org.montp2.m1decol.ter.data.exception.JDBCException;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.List;
 
-public abstract class JDBCAbstract{
+public abstract class AbstractBusiness {
 
-    private static final String DRIVER  = "org.postgresql.Driver";
-    private static final String URL     = "jdbc:postgresql://localhost/TER";
-    private static final String USER    = "cartser";
-    private static final String PASWORD = "cartser";
-
-    protected Connection connection() throws JDBCException{
-        Connection connection = null;
-        try{
-            Class.forName(DRIVER);
-            connection = DriverManager.getConnection(URL, USER, PASWORD);
-        }catch(ClassNotFoundException cfe){
-            throw new JDBCException(cfe);
-        }catch (SQLException se){
-            throw new JDBCException(se);
-        }
-        return connection;
-    }
-
-    private static class Holder {
-        static final JDBCAbstract INSTANCE = new JDBCPostgreSQL();
-    }
-
-    public static JDBCAbstract instance() {
-        return Holder.INSTANCE;
-    }
-
-    public abstract List<String> usersVeryFrequentsByForum(int MIN, int MAX) throws JDBCException;
+    public abstract List<String> getUserPostInMinAndMaxForum(int minUserToPost, int maxUserToPost,
+                                              String prefixFile, String suffixFile) throws JDBCException;
 
     public abstract List<String> forumsBelongUsers(List<Integer> users) throws JDBCException;
 
+    public abstract List<String> forumsBelongUsers(Integer idUser) throws JDBCException;
 }

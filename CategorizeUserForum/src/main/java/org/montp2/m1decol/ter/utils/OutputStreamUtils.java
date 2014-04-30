@@ -41,33 +41,43 @@ package org.montp2.m1decol.ter.utils;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
 import java.util.Map;
 
-public final class OutputStreamUtils{
+public final class OutputStreamUtils {
 
     private static final String ENCODING = "UTF-8";
 
-    public static void writeSimple(String data,String path) throws FileNotFoundException, UnsupportedEncodingException {
+    public static void writeSimple(String data, String path) throws FileNotFoundException, UnsupportedEncodingException {
         PrintWriter writer = new PrintWriter(path, ENCODING);
         writer.println(data);
         writer.close();
     }
 
-    public static void writeSimple(String []lines,String path) throws FileNotFoundException, UnsupportedEncodingException {
+    public static void writeSimple(String[] lines, String path) throws FileNotFoundException, UnsupportedEncodingException {
         PrintWriter writer = new PrintWriter(path, ENCODING);
-        for(String data : lines)
+        for (String data : lines)
             writer.println(data);
         writer.close();
     }
 
-    public static void writeSimpleMap(Map<? extends Object,? extends Object> values,String path) throws FileNotFoundException, UnsupportedEncodingException {
+    public static void writeSimpleMap(Map<? extends Object, ? extends Object> values, String path)
+            throws FileNotFoundException, UnsupportedEncodingException {
         PrintWriter writer = new PrintWriter(path, ENCODING);
-        for(Map.Entry entry : values.entrySet())
-            writer.println(entry.getKey().toString()+":"+entry.getValue().toString());
+        for (Map.Entry entry : values.entrySet())
+            writer.println(entry.getKey().toString() + ":" + entry.getValue().toString());
         writer.close();
     }
 
-    public void saveMap(){
+    public static <T> void writeSimpleCollection(Collection<? extends T> values, String path)
+            throws FileNotFoundException, UnsupportedEncodingException {
+        PrintWriter writer = new PrintWriter(path, ENCODING);
+        for (T item : values)
+            writer.println(item.toString());
+        writer.close();
+    }
+
+    public void saveMap() {
         StringBuilder builder2 = new StringBuilder();
        /* for (Map.Entry<Integer, List<Integer>> item : userByCluster.entrySet()) {
             builder2.append(item.getKey());

@@ -135,25 +135,27 @@ public class UniGramsPreProcessing implements GramsPreProcessing {
                     properties.getProperty(NGramProperties.STOP_WORD_PATH),
                     (List<String>) properties.get(NGramProperties.OTHER_STOP_WORDS), true);
 
-        String nameArff = properties.getProperty(NGramProperties.ARFF_FILE_PATH);
+        String arffPath = properties.getProperty(NGramProperties.ARFF_DATA_FILE_PATH);
 
-        if (nameArff == null){
-            nameArff = properties.getProperty(NGramProperties.ARFF_PATH) + File.separator +
-                    properties.getProperty(NGramProperties.NAME_ARFF) +
+        if (arffPath == null){
+            arffPath = properties.getProperty(NGramProperties.ARFF_DATA_PATH) + File.separator +
+                    properties.getProperty(NGramProperties.ARFF_DATA_NAME) +
                     DateUtils.currentDate("ddMMyyyyHHmmss", Locale.FRANCE);
         }else{
-            nameArff = nameArff.replace(WekaUtils.EXTENSION_ARFF, "");
+            arffPath = arffPath.replace(WekaUtils.EXTENSION_ARFF, "");
         }
 
-        properties.setProperty(NGramProperties.NAME_ARFF,nameArff);
-        properties.setProperty(NGramProperties.ARFF_FILE_PATH, nameArff + WekaUtils.EXTENSION_ARFF);
+        properties.setProperty(NGramProperties.ARFF_DATA_FILE_PATH, arffPath + WekaUtils.EXTENSION_ARFF);
 
         WekaUtils.createARFF(properties.getProperty(NGramProperties.LEMMA_DATA_PATH),
-                nameArff + WekaUtils.EXTENSION_ARFF, (List<String>) properties.get(NGramProperties.EXCLUDE_FILE));
+                arffPath + WekaUtils.EXTENSION_ARFF,
+                (List<String>) properties.get(NGramProperties.EXCLUDE_FILE));
 
+        properties.setProperty(NGramProperties.ARFF_FILTER_FILE_PATH,
+                arffPath + filterTokenizer.typeFilter() + WekaUtils.EXTENSION_ARFF);
 
-        this.filterTokenizer.indexingToTokenizer(nameArff + WekaUtils.EXTENSION_ARFF,
-                nameArff + filterTokenizer.typeFilter() + WekaUtils.EXTENSION_ARFF);
+        this.filterTokenizer.indexingToTokenizer(properties.getProperty(NGramProperties.ARFF_DATA_FILE_PATH),
+                properties.getProperty(NGramProperties.ARFF_FILTER_FILE_PATH));
     }
 
     private boolean isProcessingLemmatization(String pathData, String pathLemma) {

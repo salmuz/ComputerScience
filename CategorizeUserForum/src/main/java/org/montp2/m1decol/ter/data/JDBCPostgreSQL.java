@@ -74,7 +74,7 @@ public class JDBCPostgreSQL extends JDBCAbstract {
                     "        group by tbl.id_for ) a";
 
     protected static final String USER_FREQUENTS_BY_FORUM =
-                    "   select distinct tbl.id_aut from " +
+            "   select distinct tbl.id_aut from " +
                     "             (select m.id_aut, " +
                     "                           f.id_for, " +
                     "                           count(*) over( partition by  m.id_aut) as nbposte " +
@@ -84,7 +84,7 @@ public class JDBCPostgreSQL extends JDBCAbstract {
                     "                        inner join message m on m.id_top = t.id_top " +
                     "                    where w.id_web = 1" +
                     "                    group by m.id_aut, f.id_for) as tbl " +
-                    "                where nbposte = %s ";
+                    "                where nbposte = ? ";
 
     public List<String> usersVeryFrequentsByForum(int MIN, int MAX) throws JDBCException {
 
@@ -94,7 +94,7 @@ public class JDBCPostgreSQL extends JDBCAbstract {
         try {
             con.setAutoCommit(true);
             for (int i = MIN; i <= MAX; i++) {
-                pStmt = con.prepareCall(String.format(USER_FREQUENTS_BY_FORUM));
+                pStmt = con.prepareCall(USER_FREQUENTS_BY_FORUM);
                 pStmt.setInt(1, i);
                 ResultSet rs = pStmt.executeQuery();
                 while (rs.next()) {
@@ -105,6 +105,7 @@ public class JDBCPostgreSQL extends JDBCAbstract {
             throw new JDBCException(se);
         } finally {
             try {
+                pStmt.close();
                 con.commit();
                 con.close();
             } catch (SQLException sq) {
@@ -113,7 +114,7 @@ public class JDBCPostgreSQL extends JDBCAbstract {
         return userExclude;
     }
 
-    public List<String> forumsBelongUsers(List<String> users) throws JDBCException {
+    public synchronized List<String> forumsBelongUsers(List<Integer> users) throws JDBCException {
         PreparedStatement pStmt = null;
         Connection con = connection();
         List<String> forums = new ArrayList<String>();
@@ -121,8 +122,8 @@ public class JDBCPostgreSQL extends JDBCAbstract {
             con.setAutoCommit(true);
             pStmt = con.prepareCall(String.format(USER_IN_FORUM_SELECT, JDBCUtils.preparePlaceHolders(users.size())));
             int i = 1;
-            for (String item : users) {
-                pStmt.setInt(i++, Integer.parseInt(item));
+            for (Integer item : users) {
+                pStmt.setInt(i++, item);
             }
             ResultSet rs = pStmt.executeQuery();
             while (rs.next()) {
@@ -132,6 +133,7 @@ public class JDBCPostgreSQL extends JDBCAbstract {
             throw new JDBCException(se);
         } finally {
             try {
+                pStmt.close();
                 con.commit();
                 con.close();
             } catch (SQLException sq) {

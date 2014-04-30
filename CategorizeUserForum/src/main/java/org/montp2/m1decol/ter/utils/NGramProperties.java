@@ -43,10 +43,12 @@ public final class NGramProperties {
     public static String RAW_DATA_PATH      = "RAW_DATA_PATH";
     public static String STOP_WORD_PATH     = "STOP_WORD_PATH";
     public static String LEMMA_DATA_PATH    = "LEMMA_DATA_PATH";
-    public static String ARFF_FILE_PATH     = "ARFF_FILE_PATH";
-    public static String NAME_ARFF          = "NAME_ARFF";
-    public static String ARFF_PATH          = "ARFF_PATH";
+    public static String ARFF_DATA_FILE_PATH = "ARFF_DATA_FILE_PATH";
+    public static String ARFF_FILTER_FILE_PATH = "ARFF_FILTER_FILE_PATH";
+    public static String ARFF_DATA_NAME     = "ARFF_DATA_NAME";
+    public static String ARFF_DATA_PATH     = "ARFF_DATA_PATH";
     public static String EXCLUDE_FILE       = "EXCLUDE_FILE";
     public static String OTHER_STOP_WORDS   = "OTHER_STOP_WORDS";
+    public static String CLUSTER_MODEL      = "CLUSTER_MODEL";
 
 }
