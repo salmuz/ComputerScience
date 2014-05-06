@@ -39,6 +39,7 @@
 package org.montp2.m1decol.ter.data;
 
 import org.montp2.m1decol.ter.data.exception.JDBCException;
+import org.montp2.m1decol.ter.utils.Constants;
 import org.montp2.m1decol.ter.utils.JDBCUtils;
 
 import java.sql.Connection;
@@ -60,7 +61,7 @@ public class JDBCPostgreSQL extends JDBCAbstract {
                     " and m.id_aut IN (%s)";
 
 
-    protected static final String _SELECT =
+    protected static final String PERCENT_FORUMS_BY_USERS_SELECT =
             " select id_for, 100*count/(sum(count) over()),count " +
                     " from ( select tbl.id_for, count(id_for) as count " +
                     "           from " +
@@ -105,10 +106,10 @@ public class JDBCPostgreSQL extends JDBCAbstract {
             throw new JDBCException(se);
         } finally {
             try {
-                pStmt.close();
-                con.commit();
+                if (pStmt != null) pStmt.close();
                 con.close();
             } catch (SQLException sq) {
+                sq.printStackTrace();
             }
         }
         return userExclude;
@@ -133,15 +134,46 @@ public class JDBCPostgreSQL extends JDBCAbstract {
             throw new JDBCException(se);
         } finally {
             try {
-                pStmt.close();
-                con.commit();
+                if (pStmt != null) pStmt.close();
                 con.close();
             } catch (SQLException sq) {
+                sq.printStackTrace();
             }
         }
         return forums;
     }
 
+
+    public List<String> percentForumsByUsers(List<Integer> users) throws JDBCException {
+
+        List<String> table = new ArrayList<String>();
+        PreparedStatement pStmt = null;
+        Connection con = connection();
+        try {
+            con.setAutoCommit(true);
+            pStmt = con.prepareCall(String.format(PERCENT_FORUMS_BY_USERS_SELECT, JDBCUtils.preparePlaceHolders(users.size())));
+            int i = 1;
+            for (Integer item : users) {
+                pStmt.setInt(i++, item);
+            }
+            ResultSet rs = pStmt.executeQuery();
+            while (rs.next()) {
+                table.add(rs.getString(1) + Constants.JDBC_SEPARATOR +
+                        rs.getString(2) + Constants.JDBC_SEPARATOR +
+                        rs.getString(3));
+            }
+        } catch (SQLException se) {
+            throw new JDBCException(se);
+        } finally {
+            try {
+                if (pStmt != null) pStmt.close();
+                con.close();
+            } catch (SQLException sq) {
+                sq.printStackTrace();
+            }
+        }
+        return table;
+    }
 }
 
 

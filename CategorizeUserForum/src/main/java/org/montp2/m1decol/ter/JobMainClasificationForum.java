@@ -48,10 +48,7 @@ import org.montp2.m1decol.ter.gramms.FilterTokenizer;
 import org.montp2.m1decol.ter.gramms.UniGramsPreProcessing;
 import org.montp2.m1decol.ter.gramms.filters.FilterTokenizerBoolean;
 import org.montp2.m1decol.ter.preprocessing.GlobalPreProcessing;
-import org.montp2.m1decol.ter.utils.InputStreamUtils;
-import org.montp2.m1decol.ter.utils.MapUtils;
-import org.montp2.m1decol.ter.utils.NGramProperties;
-import org.montp2.m1decol.ter.utils.OutputStreamUtils;
+import org.montp2.m1decol.ter.utils.*;
 
 import java.io.File;
 import java.util.List;
@@ -88,9 +85,10 @@ public class JobMainClasificationForum {
     }
 
     public static Map<Integer, List<Integer>> computeClustering(Map<Integer, Integer> arffToIdUser,
+                                                                Properties propertiesCluster,
                                                                 String arffFilter, String modelCluster) throws Exception {
         Clustering clu = new KMeansClustering();
-        clu.computeClustering(arffFilter, modelCluster);
+        clu.computeClustering(arffFilter, modelCluster, propertiesCluster);
         return clu.computeInstanceByCluster(arffFilter, modelCluster, arffToIdUser);
     }
 
@@ -102,7 +100,7 @@ public class JobMainClasificationForum {
     static String STOP_WORD = "/Users/user/Dropbox/MasterM1_DECOL/Semestre02/ProjetTER/TER_NLP/source/motvides.txt";
 
 
-    static String ROOT_OUT_PATH = "/Users/user/Downloads/TER/test/boolean/Avec5Forums";
+    static String ROOT_OUT_PATH = "/Users/user/Downloads/TER/test/boolean/";
     static String MODEL_CLUSTER = ROOT_OUT_PATH + "/kmeans.model";
     static String PATH_ARFF = ROOT_OUT_PATH;
     static String NAME_ARFF = "CategorizeUserForum";
@@ -113,19 +111,47 @@ public class JobMainClasificationForum {
     public static void main(String... arg) throws Exception {
 
         GlobalPreProcessing global = new GlobalPreProcessing();
+
         NearestNeighbor near = new NearestNeighbor();
 
         //OutputStreamUtils.writeSimpleCollection(global.intersectVocabulary(FORUMS_LEMMA),
         //        PATH_MAIN + File.separator + "intersectionWordsForums.txt");
 
-        computeUniGramme(new FilterTokenizerBoolean(), 6, 12);
+        // {POST, CLUSTER, WORDS_TO_KEEP}
+        // Utilisatuer qui postent sur 5 post
+        //int input[] = new int[]{5, 8, 100};
+        // Utilisatuer qui postent sur 4 post
+        //int input[] = new int[]{4, 12, 100};
+        // Utilisatuer qui postent sur 3 post
+        //int input[] = new int[]{3, 6, 90};
+        // Utilisatuer qui postent sur 2 post
+        //int input[] = new int[]{2, 7, 50};
+        // Utilisatuer qui postent sur 1 post
+        int input[] = new int[]{1, 9, 50};
+
+        ROOT_OUT_PATH += "Avec" + input[0] + "Forums";
+        MODEL_CLUSTER = ROOT_OUT_PATH + "/kmeans.model";
+        PATH_ARFF = ROOT_OUT_PATH;
+
+        new File(ROOT_OUT_PATH).mkdir();
+
+        computeUniGramme(new FilterTokenizerBoolean(input[2]), input[0] + 1, 12);
 
         Map<Integer, Integer> arffToIdUser = global.getMapOfInstanceArffToIdUser(
                 DATA_LEMMA, properties.getProperty(NGramProperties.ARFF_DATA_FILE_PATH));
 
         properties.setProperty(NGramProperties.CLUSTER_MODEL, MODEL_CLUSTER);
 
+        Properties clusterProp = new Properties();
+        clusterProp.setProperty(ClusterProperties.Kmeans.PERSERVE_INSTANCE, "true");
+        clusterProp.setProperty(ClusterProperties.Kmeans.DONT_REPLACE_MISSING_VALUES, "false");
+        clusterProp.setProperty(ClusterProperties.Kmeans.DISPLAY_STD_DEVS, "false");
+        clusterProp.setProperty(ClusterProperties.Kmeans.MAX_ITERATIONS, "500");
+        clusterProp.setProperty(ClusterProperties.Kmeans.NUM_CLUSTERS, String.valueOf(input[1]));
+
+
         Map<Integer, List<Integer>> instanceByCluster = computeClustering(arffToIdUser,
+                clusterProp,
                 properties.getProperty(NGramProperties.ARFF_FILTER_FILE_PATH),
                 properties.getProperty(NGramProperties.CLUSTER_MODEL));
 
@@ -134,6 +160,8 @@ public class JobMainClasificationForum {
                 properties.getProperty(NGramProperties.CLUSTER_MODEL), arffToIdUser);
 
 
+        File rootCluster = new File(ROOT_OUT_PATH + File.separator + "clusters");
+        rootCluster.mkdir();
         for (Map.Entry<Integer, List<Integer>> instance : instanceByCluster.entrySet()) {
             StringBuilder buffer = new StringBuilder();
             for (Integer iduser : instance.getValue()) {
@@ -144,6 +172,7 @@ public class JobMainClasificationForum {
             String file = ROOT_OUT_PATH + File.separator + "cluster_" + instance.getKey();
             OutputStreamUtils.writeSimple(buffer.toString(), file + ".txt");
             computeFrecuency(file + "_frec.txt", file + ".txt", false);
+            new File(file + ".txt").renameTo(new File(rootCluster.getPath() + File.separator + "cluster_" + instance.getKey() + ".txt"));
         }
 
 
@@ -160,25 +189,30 @@ public class JobMainClasificationForum {
             }
         }
 
-        OutputStreamUtils.writeSimple(buffer.toString(), ROOT_OUT_PATH + "/userProcheEtForums.txt");
+        OutputStreamUtils.writeSimple(buffer.toString(), ROOT_OUT_PATH + "/forumsBelongUserProche.txt");
 
-        /*
-        JDBCPostgreSQL jdbc = new JDBCPostgreSQL();
-        for(String line : InputStreamUtils.readByLine("/Users/user/Downloads/TER/test/nearNeighbor2.txt")){
-            if(line.isEmpty()) break;
-            String [] users = line.split(":")[1].split(",");
-            System.out.println(jdbc.forumsBelongUsers(new ArrayList<String>(Arrays.asList(users))));
-        }*/
-
-        /*
-        for(File file: FileUtils.ls("/Users/user/Downloads/TER/test/forums_lemma/")){
-
-            computeFrecuency(file.getParentFile().getParent()+File.separator+"Freq"+file.getName(),file.getAbsolutePath());
+        buffer = new StringBuilder();
+        for (Map.Entry<Integer, List<Integer>> instance : instanceByCluster.entrySet()) {
+            buffer.append("id_cluster:" + instance.getKey() + " ");
+            buffer.append("id_forums:" + business.forumsBelongUsers(instance.getValue()));
+            buffer.append("\n");
         }
 
-        /*
-        }*/
+        OutputStreamUtils.writeSimple(buffer.toString(), ROOT_OUT_PATH + "/forumsBelongCluster.txt");
 
+        buffer = new StringBuilder();
+        for (Map.Entry<Integer, List<Integer>> instance : instanceByCluster.entrySet()) {
+            buffer.append("id_cluster:" + instance.getKey() + "\n");
+            for(String item : business.percentForumsByUsers(instance.getValue())){
+                buffer.append(item.replace(Constants.JDBC_SEPARATOR,":") + "\n");
+            }
+            buffer.append("\n");
+        }
+
+        OutputStreamUtils.writeSimple(buffer.toString(), ROOT_OUT_PATH + "/percentForumsByUsers.txt");
+
+        /*System.out.println(global.intersectVocabulary(FORUMS_LEMMA));
+        System.out.println(global.intersectVocabulary(ROOT_OUT_PATH+"/clusters/"));*/
 
     }
 }

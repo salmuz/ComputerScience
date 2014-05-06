@@ -77,4 +77,6 @@ public abstract class JDBCAbstract{
 
     public abstract List<String> forumsBelongUsers(List<Integer> users) throws JDBCException;
 
+    public abstract List<String> percentForumsByUsers(List<Integer> users) throws JDBCException;
+
 }

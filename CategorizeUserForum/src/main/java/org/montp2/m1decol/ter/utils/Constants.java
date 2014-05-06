@@ -43,6 +43,8 @@ import java.util.List;
 
 public final class Constants {
 
+    public static final String JDBC_SEPARATOR = "$";
+
     public static final String HOME_TREETAGER = "/Users/user/Applications/tree-tagger/";
 
     public static final String TREETAGGER_LANGUAGE = "/Users/user/Applications/tree-tagger/lib/french-utf8.par";

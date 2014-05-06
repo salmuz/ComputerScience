@@ -48,10 +48,11 @@ import weka.core.Instances;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 public class XMeansClustering  implements Clustering {
 
-    public Clusterer computeClustering(String inPath, String outPath) throws Exception {
+    public Clusterer computeClustering(String inPath, String outPath, Properties propertiesCluster) throws Exception {
         Instances inputInstances = WekaUtils.loadARFF(inPath);
 
         EuclideanDistance euclideanDistance = new EuclideanDistance();

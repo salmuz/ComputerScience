@@ -48,6 +48,12 @@ import weka.filters.unsupervised.attribute.StringToWordVector;
 
 public class FilterTokenizerBoolean implements FilterTokenizer{
 
+    private final int wordsTokeep;
+
+    public FilterTokenizerBoolean(int wordsTokeep) {
+        this.wordsTokeep = wordsTokeep;
+    }
+
     public void indexingToTokenizer(String inPath, String outPath) throws Exception {
         WordTokenizer wordTokenizer = new WordTokenizer();
         wordTokenizer.setDelimiters("\r \t.,;:'\"()?!");
@@ -61,7 +67,7 @@ public class FilterTokenizerBoolean implements FilterTokenizer{
         filter.setOutputWordCounts(false);
         filter.setTokenizer(wordTokenizer);
         filter.setUseStoplist(true);
-        filter.setWordsToKeep(200);
+        filter.setWordsToKeep(wordsTokeep);
 
         Instances outputInstances = Filter.useFilter(inputInstances, filter);
 

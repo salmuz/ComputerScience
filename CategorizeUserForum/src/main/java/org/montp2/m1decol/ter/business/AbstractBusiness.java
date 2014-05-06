@@ -38,16 +38,18 @@
 
 package org.montp2.m1decol.ter.business;
 
-import org.montp2.m1decol.ter.data.exception.JDBCException;
+import org.montp2.m1decol.ter.business.exception.BusinessException;
 
 import java.util.List;
 
 public abstract class AbstractBusiness {
 
     public abstract List<String> getUserPostInMinAndMaxForum(int minUserToPost, int maxUserToPost,
-                                              String prefixFile, String suffixFile) throws JDBCException;
+                                              String prefixFile, String suffixFile) throws BusinessException;
 
-    public abstract List<String> forumsBelongUsers(List<Integer> users) throws JDBCException;
+    public abstract List<String> forumsBelongUsers(List<Integer> users) throws BusinessException;
 
-    public abstract List<String> forumsBelongUsers(Integer idUser) throws JDBCException;
+    public abstract List<String> forumsBelongUsers(Integer idUser) throws BusinessException;
+
+    public abstract List<String> percentForumsByUsers(List<Integer> users) throws BusinessException;
 }

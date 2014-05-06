@@ -38,6 +38,7 @@
 
 package org.montp2.m1decol.ter.business;
 
+import org.montp2.m1decol.ter.business.exception.BusinessException;
 import org.montp2.m1decol.ter.data.JDBCAbstract;
 import org.montp2.m1decol.ter.data.exception.JDBCException;
 import org.montp2.m1decol.ter.utils.Constants;
@@ -51,24 +52,41 @@ public class ForumBusinness extends AbstractBusiness {
     private JDBCAbstract jdbc = JDBCAbstract.instance();
 
     @Override
-    public List<String> getUserPostInMinAndMaxForum(int minUserToPost, int maxUserToPost, String prefixFile, String suffixFile) throws JDBCException {
-        List<String> userExcludes = new ArrayList<String>();
-        for (String idUser : jdbc.usersVeryFrequentsByForum(minUserToPost, maxUserToPost)) {
-            userExcludes.add(prefixFile + idUser + suffixFile);
+    public List<String> getUserPostInMinAndMaxForum(int minUserToPost, int maxUserToPost, String prefixFile, String suffixFile)
+            throws BusinessException {
+        try {
+            List<String> userExcludes = new ArrayList<String>();
+            for (String idUser : jdbc.usersVeryFrequentsByForum(minUserToPost, maxUserToPost)) {
+                userExcludes.add(prefixFile + idUser + suffixFile);
+            }
+            userExcludes.addAll(Constants.userEmpty);
+            return userExcludes;
+        } catch (JDBCException e) {
+            throw new BusinessException(e);
         }
-
-        userExcludes.addAll(Constants.userEmpty);
-        return userExcludes;
     }
 
     @Override
-    public List<String> forumsBelongUsers(List<Integer> users) throws JDBCException {
-        return jdbc.forumsBelongUsers(users);
+    public List<String> forumsBelongUsers(List<Integer> users) throws BusinessException {
+        try {
+            return jdbc.forumsBelongUsers(users);
+        } catch (JDBCException e) {
+            throw new BusinessException(e);
+        }
     }
 
     @Override
-    public List<String> forumsBelongUsers(Integer idUser) throws JDBCException {
+    public List<String> forumsBelongUsers(Integer idUser) throws BusinessException {
         return this.forumsBelongUsers(new ArrayList<Integer>(Arrays.asList(new Integer[]{idUser})));
+    }
+
+    @Override
+    public List<String> percentForumsByUsers(List<Integer> users) throws BusinessException {
+        try {
+            return jdbc.percentForumsByUsers(users);
+        } catch (JDBCException e) {
+            throw new BusinessException(e);
+        }
     }
 
 

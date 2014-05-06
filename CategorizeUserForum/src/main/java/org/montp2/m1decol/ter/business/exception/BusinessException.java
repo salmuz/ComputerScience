@@ -1,10 +1,10 @@
 /* ==========================================
- * GrapheMultiPlateforme : a free Java graph-theory library
+ * CategorizeUserForum : a free Java graph-theory library
  * ==========================================
  * 
  * salmuz : Carranza Alarcon Yonatan Carlos
  * 
- * (C) Copyright 2013, by salmuz and Contributors.
+ * (C) Copyright 2014, by salmuz and Contributors.
  * 
  * Project Info:  https://github.com/salmuz/Graphes_Multi_Plateformes
  * Project Creator:  salmuz (https://www.assembla.com/spaces/salmuz-java) 
@@ -26,7 +26,7 @@
  * ------------------
  * Point.java
  * ------------------
- * (C) Copyright 2013, by salmuz and Contributors
+ * (C) Copyright 2014, by salmuz and Contributors
  *
  * Original Author: Carranza Alarcon Yonatan Carlos
  * Contributor(s):  
@@ -36,40 +36,19 @@
  *
  */
 
-package org.montp2.m1decol.ter.clustering;
+package org.montp2.m1decol.ter.business.exception;
 
-import weka.clusterers.Clusterer;
+public class BusinessException extends Exception {
 
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+    public BusinessException(String message) {
+        super(message);
+    }
 
-/**
- * Created with IntelliJ IDEA.
- * User: salmuz
- * Date: 12/04/2014
- * Time: 12:12
- * To change this template use File | Settings | File Templates.
- */
-public interface Clustering {
+    public BusinessException(Throwable cause) {
+        super(cause);
+    }
 
-    /**
-     *
-     * @param inPath
-     * @param outPath
-     * @return
-     * @throws Exception
-     */
-    public Clusterer computeClustering(String inPath,String outPath, Properties propertiesCluster) throws Exception;
-
-    /**
-     *
-     * @param arffData
-     * @param inModel
-     * @param arffToIdUser Position of id user in the file arff
-     * @return
-     * @throws Exception
-     */
-    public Map<Integer, List<Integer>> computeInstanceByCluster(String arffData,String inModel, Map<Integer, Integer> arffToIdUser) throws Exception;
-
+    public BusinessException() {
+        super();
+    }
 }

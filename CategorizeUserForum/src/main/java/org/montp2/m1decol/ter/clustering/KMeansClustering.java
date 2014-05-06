@@ -38,20 +38,18 @@
 
 package org.montp2.m1decol.ter.clustering;
 
+import org.montp2.m1decol.ter.utils.ClusterProperties;
 import org.montp2.m1decol.ter.utils.WekaUtils;
 import weka.clusterers.Clusterer;
 import weka.clusterers.SimpleKMeans;
 import weka.core.EuclideanDistance;
 import weka.core.Instances;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class KMeansClustering implements Clustering {
 
-    public Clusterer computeClustering(String inPath, String outPath) throws Exception {
+    public Clusterer computeClustering(String inPath, String outPath,Properties propertiesCluster) throws Exception {
         Instances inputInstances = WekaUtils.loadARFF(inPath);
 
         EuclideanDistance euclideanDistance = new EuclideanDistance();
@@ -60,12 +58,19 @@ public class KMeansClustering implements Clustering {
         euclideanDistance.setInvertSelection(false);
 
         SimpleKMeans kmeans = new SimpleKMeans();
-        kmeans.setPreserveInstancesOrder(true);
-        kmeans.setDontReplaceMissingValues(false);
-        kmeans.setDisplayStdDevs(false);
-        kmeans.setMaxIterations(500);
-        kmeans.setNumClusters(6);
+        kmeans.setPreserveInstancesOrder(
+                Boolean.valueOf(propertiesCluster.getProperty(ClusterProperties.Kmeans.PERSERVE_INSTANCE)));
+        kmeans.setDontReplaceMissingValues(
+                Boolean.valueOf(propertiesCluster.getProperty(ClusterProperties.Kmeans.DONT_REPLACE_MISSING_VALUES)));
+        kmeans.setDisplayStdDevs(
+                Boolean.valueOf(propertiesCluster.getProperty(ClusterProperties.Kmeans.DISPLAY_STD_DEVS)));
+        kmeans.setMaxIterations(
+                Integer.valueOf(propertiesCluster.getProperty(ClusterProperties.Kmeans.MAX_ITERATIONS)));
+        kmeans.setNumClusters(
+                Integer.valueOf(propertiesCluster.getProperty(ClusterProperties.Kmeans.NUM_CLUSTERS)));
         kmeans.setSeed(10);
+        //kmeans.setSeed(
+          //      Integer.valueOf(propertiesCluster.getProperty(ClusterProperties.Kmeans.SEED)));
         kmeans.setDistanceFunction(euclideanDistance);
         kmeans.buildClusterer(inputInstances);
 
