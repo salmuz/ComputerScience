@@ -161,7 +161,7 @@ public class GlobalPreProcessing {
     private void splitWordsByFile(String path, Collection<String> words) throws IOException {
         for (String line : InputStreamUtils.readByLine(path)) {
             for (String word : line.split("[^\\p{L}]+")) {
-                words.add(word);
+                if(!word.isEmpty()) words.add(word);
             }
         }
     }

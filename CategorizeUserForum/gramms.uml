@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>org.montp2.m1decol.ter.gramms</OriginalElement>
+  <nodes>
+    <node x="1767.186513629842" y="383.4153515064562">org.montp2.m1decol.ter.business.exception.BusinessException</node>
+    <node x="1775.186513629842" y="143.41535150645623">org.montp2.m1decol.ter.data.JDBCPostgreSQL</node>
+    <node x="1330.0" y="585.0">org.montp2.m1decol.ter.clustering.NearestNeighbor</node>
+    <node x="1095.7675753228123" y="450.4038737446198">org.montp2.m1decol.ter.clustering.Clustering</node>
+    <node x="1574.186513629842" y="383.4153515064562">org.montp2.m1decol.ter.business.ForumBusinness</node>
+    <node x="1571.686513629842" y="503.4153515064562">org.montp2.m1decol.ter.business.AbstractBusiness</node>
+    <node x="885.131994261119" y="163.1987087517934">org.montp2.m1decol.ter.preprocessing.lemmatize.TreeTaggerWordWrapper</node>
+    <node x="1071.5" y="23.031563845050215">org.montp2.m1decol.ter.exception.NotDirectoryException</node>
+    <node x="1579.686513629842" y="143.41535150645623">org.montp2.m1decol.ter.data.exception.JDBCException</node>
+    <node x="1300.084648493544" y="385.0">org.montp2.m1decol.ter.JobMainClasificationForum</node>
+    <node x="1313.2202295552368" y="49.537302725968445">org.montp2.m1decol.ter.exception.NotFileException</node>
+    <node x="1069.0" y="105.0">org.montp2.m1decol.ter.gramms.UniGramsPreProcessing</node>
+    <node x="1096.5" y="225.0">org.montp2.m1decol.ter.preprocessing.lemmatize.Lemmatisation</node>
+    <node x="1584.186513629842" y="263.4153515064562">org.montp2.m1decol.ter.data.JDBCAbstract</node>
+    <node x="867.457675753228" y="240.4626972740316">org.montp2.m1decol.ter.gramms.filters.FilterTokenizerVector</node>
+    <node x="701.1872309899569" y="181.83070301291252">org.montp2.m1decol.ter.gramms.FilterTokenizer</node>
+    <node x="1372.9799139167867" y="125.16714490674318">org.montp2.m1decol.ter.exception.ProcessingException</node>
+    <node x="1285.0190915168318" y="235.44825269394943">org.montp2.m1decol.ter.preprocessing.GlobalPreProcessing</node>
+    <node x="1141.5" y="585.0">org.montp2.m1decol.ter.clustering.DistanceUser</node>
+    <node x="1071.7675753228123" y="530.7876614060258">org.montp2.m1decol.ter.clustering.KMeansClustering</node>
+    <node x="676.6872309899569" y="301.8307030129125">org.montp2.m1decol.ter.gramms.filters.FilterTokenizerBoolean</node>
+    <node x="866.3027259684362" y="55.87589670014347">org.montp2.m1decol.ter.gramms.GramsPreProcessing</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="org.montp2.m1decol.ter.JobMainClasificationForum" target="org.montp2.m1decol.ter.gramms.filters.FilterTokenizerBoolean">
+      <point x="-40.0" y="-15.0" />
+      <point x="1360.0" y="320.0" />
+      <point x="88.5" y="0.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.business.ForumBusinness" target="org.montp2.m1decol.ter.business.exception.BusinessException">
+      <point x="68.5" y="0.0" />
+      <point x="-75.5" y="0.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.preprocessing.lemmatize.Lemmatisation" target="org.montp2.m1decol.ter.preprocessing.lemmatize.TreeTaggerWordWrapper">
+      <point x="-63.5" y="0.0" />
+      <point x="93.5" y="0.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.clustering.NearestNeighbor" target="org.montp2.m1decol.ter.clustering.DistanceUser">
+      <point x="-70.0" y="0.0" />
+      <point x="58.5" y="0.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.gramms.UniGramsPreProcessing" target="org.montp2.m1decol.ter.preprocessing.lemmatize.Lemmatisation">
+      <point x="0.0" y="15.0" />
+      <point x="0.0" y="-15.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.business.ForumBusinness" target="org.montp2.m1decol.ter.data.JDBCAbstract">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.gramms.filters.FilterTokenizerVector" target="org.montp2.m1decol.ter.gramms.FilterTokenizer">
+      <point x="84.0" y="0.0" />
+      <point x="-64.0" y="0.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.JobMainClasificationForum" target="org.montp2.m1decol.ter.clustering.KMeansClustering">
+      <point x="-101.5" y="0.0" />
+      <point x="73.5" y="0.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.data.JDBCPostgreSQL" target="org.montp2.m1decol.ter.data.JDBCAbstract">
+      <point x="0.0" y="15.0" />
+      <point x="1842.686513629842" y="278.4153515064562" />
+      <point x="58.5" y="0.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.gramms.UniGramsPreProcessing" target="org.montp2.m1decol.ter.preprocessing.GlobalPreProcessing">
+      <point x="91.0" y="10.0" />
+      <point x="1293.828550932568" y="161.69296987087517" />
+      <point x="0.0" y="-15.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.clustering.KMeansClustering" target="org.montp2.m1decol.ter.clustering.Clustering">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.JobMainClasificationForum" target="org.montp2.m1decol.ter.business.AbstractBusiness">
+      <point x="40.0" y="15.0" />
+      <point x="1440.0" y="520.0" />
+      <point x="-71.0" y="0.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.JobMainClasificationForum" target="org.montp2.m1decol.ter.clustering.NearestNeighbor">
+      <point x="0.0" y="15.0" />
+      <point x="0.0" y="-15.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.preprocessing.GlobalPreProcessing" target="org.montp2.m1decol.ter.preprocessing.lemmatize.Lemmatisation">
+      <point x="-80.5" y="0.0" />
+      <point x="63.5" y="0.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.preprocessing.GlobalPreProcessing" target="org.montp2.m1decol.ter.exception.ProcessingException">
+      <point x="80.5" y="0.0" />
+      <point x="-82.0" y="0.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.JobMainClasificationForum" target="org.montp2.m1decol.ter.gramms.UniGramsPreProcessing">
+      <point x="-101.5" y="-10.0" />
+      <point x="667.8550932568152" y="390.00000000000006" />
+      <point x="666.2704447632713" y="123.41535150645623" />
+      <point x="-91.0" y="5.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.gramms.UniGramsPreProcessing" target="org.montp2.m1decol.ter.gramms.FilterTokenizer">
+      <point x="-91.0" y="10.0" />
+      <point x="763.6025824964132" y="130.0" />
+      <point x="0.0" y="-15.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.JobMainClasificationForum" target="org.montp2.m1decol.ter.preprocessing.GlobalPreProcessing">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.gramms.UniGramsPreProcessing" target="org.montp2.m1decol.ter.exception.NotDirectoryException">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.gramms.filters.FilterTokenizerBoolean" target="org.montp2.m1decol.ter.gramms.FilterTokenizer">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.JobMainClasificationForum" target="org.montp2.m1decol.ter.business.ForumBusinness">
+      <point x="101.5" y="0.0" />
+      <point x="-68.5" y="0.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.data.JDBCPostgreSQL" target="org.montp2.m1decol.ter.data.exception.JDBCException">
+      <point x="-67.5" y="0.0" />
+      <point x="63.0" y="0.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.business.ForumBusinness" target="org.montp2.m1decol.ter.business.AbstractBusiness">
+      <point x="0.0" y="15.0" />
+      <point x="0.0" y="-15.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.gramms.UniGramsPreProcessing" target="org.montp2.m1decol.ter.gramms.GramsPreProcessing">
+      <point x="-91.0" y="0.0" />
+      <point x="80.5" y="0.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.gramms.UniGramsPreProcessing" target="org.montp2.m1decol.ter.exception.NotFileException">
+      <point x="91.0" y="0.0" />
+      <point x="-70.5" y="0.0" />
+    </edge>
+    <edge source="org.montp2.m1decol.ter.data.JDBCAbstract" target="org.montp2.m1decol.ter.data.exception.JDBCException">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.8310547759167043" x="1348.6932127682755" y="339.6956095435233" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

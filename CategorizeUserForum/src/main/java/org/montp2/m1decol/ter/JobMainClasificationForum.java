@@ -51,6 +51,7 @@ import org.montp2.m1decol.ter.preprocessing.GlobalPreProcessing;
 import org.montp2.m1decol.ter.utils.*;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -77,7 +78,12 @@ public class JobMainClasificationForum {
             properties.put(NGramProperties.ARFF_DATA_PATH, PATH_ARFF);
             properties.put(NGramProperties.EXCLUDE_FILE,
                     business.getUserPostInMinAndMaxForum(minUserToPost, maxUserToPost, "user_", ".txt"));
-            properties.put(NGramProperties.OTHER_STOP_WORDS, new GlobalPreProcessing().intersectVocabulary(FORUMS_LEMMA));
+            Collection<String> intersect =  new GlobalPreProcessing().intersectVocabulary(FORUMS_LEMMA);
+            //intersect.addAll(new GlobalPreProcessing().intersectVocabulary("/Users/user/Downloads/TER/test/boolean/Avec5Forums/clusters/"));
+            //intersect.addAll(new GlobalPreProcessing().intersectVocabulary("/Users/user/Downloads/TER/test/boolean/Avec5ForumsIntersect/clusters/"));
+            //intersect.addAll(new GlobalPreProcessing().intersectVocabulary("/Users/user/Downloads/TER/test/boolean/Avec5ForumsIntersect2/clusters/"));
+            //System.out.println(intersect);
+            properties.put(NGramProperties.OTHER_STOP_WORDS, intersect);
             uni.executePreProccesing(properties);
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,9 +100,9 @@ public class JobMainClasificationForum {
 
 
     static String ROOT_DATA = "/Users/user/Downloads/TER/test";
-    static String DATA = ROOT_DATA + "/users/";
-    static String DATA_LEMMA = ROOT_DATA + "/users_lemma/";
-    static String FORUMS_LEMMA = ROOT_DATA + "/forums_lemma/";
+    static String DATA = ROOT_DATA + "/users_forums/";
+    static String DATA_LEMMA = ROOT_DATA + "/users_forums_lemma/";
+    static String FORUMS_LEMMA = ROOT_DATA + "/forums_users/";
     static String STOP_WORD = "/Users/user/Dropbox/MasterM1_DECOL/Semestre02/ProjetTER/TER_NLP/source/motvides.txt";
 
 
@@ -119,7 +125,7 @@ public class JobMainClasificationForum {
 
         // {POST, CLUSTER, WORDS_TO_KEEP}
         // Utilisatuer qui postent sur 5 post
-        //int input[] = new int[]{5, 8, 100};
+        int input[] = new int[]{5, 8, 100};
         // Utilisatuer qui postent sur 4 post
         //int input[] = new int[]{4, 12, 100};
         // Utilisatuer qui postent sur 3 post
@@ -127,9 +133,9 @@ public class JobMainClasificationForum {
         // Utilisatuer qui postent sur 2 post
         //int input[] = new int[]{2, 7, 50};
         // Utilisatuer qui postent sur 1 post
-        int input[] = new int[]{1, 9, 50};
+        //int input[] = new int[]{1, 9, 50};
 
-        ROOT_OUT_PATH += "Avec" + input[0] + "Forums";
+        ROOT_OUT_PATH += "Avec" + input[0] + "ForumsUsers";
         MODEL_CLUSTER = ROOT_OUT_PATH + "/kmeans.model";
         PATH_ARFF = ROOT_OUT_PATH;
 

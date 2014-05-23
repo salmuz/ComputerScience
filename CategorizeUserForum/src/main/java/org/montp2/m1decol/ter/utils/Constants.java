@@ -55,7 +55,8 @@ public final class Constants {
 
 
     public static final List<String> userEmpty = Arrays.asList(new String[]{
-            "user_640.txt","user_277.txt","user_61.txt","user_646.txt","user_364" // vide
+            "user_640.txt","user_277.txt","user_61.txt","user_646.txt","user_364"
+            ,"user_347.txt","user_398.txt"// vide
     });
 
     // il faut l'extraire de la base de données, on l'a fait avec python :)
