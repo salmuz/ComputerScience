@@ -37,6 +37,7 @@
 				<dt><p>Utilisateur 3</p><img src="images/user.png" ALIGN="right" height="20%" width="20%"></dt>  
 				<dd>Information sur l'utilisateur</dd> 
 				<input type="button" value="Visiter Profil">
+                <input type="button" value="back" onclick="history.back()" />
 			</dl> 
 		</div>
 		

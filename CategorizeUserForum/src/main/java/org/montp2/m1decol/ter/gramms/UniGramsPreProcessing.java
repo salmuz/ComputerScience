@@ -59,6 +59,9 @@ public class UniGramsPreProcessing implements GramsPreProcessing {
     private FilterTokenizer filterTokenizer;
     private List<String> stopWords;
 
+    public UniGramsPreProcessing(){
+    }
+
     public UniGramsPreProcessing(FilterTokenizer filterTokenizer) {
         stopWords = new ArrayList<String>();
         this.filterTokenizer = filterTokenizer;

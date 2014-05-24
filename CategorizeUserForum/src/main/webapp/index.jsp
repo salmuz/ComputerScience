@@ -29,11 +29,11 @@
 		<h1>Système De Recommandation D'Amis</h1>
 		<div id='form_wrap'>
 			
-			<FORM METHOD="GET" ACTION="http://localhost:8080/InterfaceG/intP" ENCTYPE="x-www-form-urlencoded">
+			<FORM METHOD="POST" ACTION="AnalyserMessageServlet">
 
-		<p id="formstatus"></p>
+		        <p id="formstatus"></p>
 				<p></p>
-				<label for="email">Votre Message : </label>
+				<label for="message">Votre Message : </label>
 				<textarea  name="message" value="Message" id="msg" ></textarea>
 				
 				<input type="submit" name ="submit" value="Poster" />
