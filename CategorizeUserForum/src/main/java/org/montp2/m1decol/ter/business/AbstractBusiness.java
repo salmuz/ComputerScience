@@ -39,6 +39,7 @@
 package org.montp2.m1decol.ter.business;
 
 import org.montp2.m1decol.ter.business.exception.BusinessException;
+import org.montp2.m1decol.ter.data.beans.Author;
 
 import java.util.List;
 
@@ -52,4 +53,6 @@ public abstract class AbstractBusiness {
     public abstract List<String> forumsBelongUsers(Integer idUser) throws BusinessException;
 
     public abstract List<String> percentForumsByUsers(List<Integer> users) throws BusinessException;
+
+    public abstract List<Author> findUsersByIDs(List<Integer> users) throws BusinessException;
 }

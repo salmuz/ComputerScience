@@ -38,6 +38,7 @@
 
 package org.montp2.m1decol.ter.data;
 
+import org.montp2.m1decol.ter.data.beans.Author;
 import org.montp2.m1decol.ter.data.exception.JDBCException;
 import org.montp2.m1decol.ter.utils.Constants;
 import org.montp2.m1decol.ter.utils.JDBCUtils;
@@ -86,6 +87,11 @@ public class JDBCPostgreSQL extends JDBCAbstract {
                     "                    where w.id_web = 1" +
                     "                    group by m.id_aut, f.id_for) as tbl " +
                     "                where nbposte = ? ";
+
+    protected static final String USERS_BY_ID =
+            " SELECT id_aut, pseudonym_aut, profile_link_aut, rank_aut, gender_aut " +
+            "   FROM author " +
+            " WHERE id_aut IN (%s)";
 
     public List<String> usersVeryFrequentsByForum(int MIN, int MAX) throws JDBCException {
 
@@ -173,6 +179,35 @@ public class JDBCPostgreSQL extends JDBCAbstract {
             }
         }
         return table;
+    }
+
+    public List<Author> findUsersByIDs(List<Integer> idUsers) throws JDBCException {
+
+        List<Author> authors = new ArrayList<Author>();
+        PreparedStatement pStmt = null;
+        Connection con = connection();
+        try {
+            con.setAutoCommit(true);
+            pStmt = con.prepareCall(String.format(USERS_BY_ID, JDBCUtils.preparePlaceHolders(idUsers.size())));
+            int i = 1;
+            for (Integer item : idUsers) {
+                pStmt.setInt(i++, item);
+            }
+            ResultSet rs = pStmt.executeQuery();
+            while (rs.next()) {
+                authors.add(new Author(rs.getInt(1),rs.getString(3),rs.getString(2),rs.getString(4),rs.getString(5)));
+            }
+        } catch (SQLException se) {
+            throw new JDBCException(se);
+        } finally {
+            try {
+                if (pStmt != null) pStmt.close();
+                con.close();
+            } catch (SQLException sq) {
+                sq.printStackTrace();
+            }
+        }
+        return authors;
     }
 }
 

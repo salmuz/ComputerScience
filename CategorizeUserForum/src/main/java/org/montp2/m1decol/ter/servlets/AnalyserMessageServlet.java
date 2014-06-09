@@ -38,7 +38,10 @@
 
 package org.montp2.m1decol.ter.servlets;
 
+import org.montp2.m1decol.ter.business.AbstractBusiness;
+import org.montp2.m1decol.ter.business.ForumBusinness;
 import org.montp2.m1decol.ter.gramms.UniGramsPreProcessing;
+import org.montp2.m1decol.ter.utils.FileUtils;
 import org.montp2.m1decol.ter.utils.InputStreamUtils;
 import org.montp2.m1decol.ter.utils.OutputStreamUtils;
 import org.montp2.m1decol.ter.utils.WekaUtils;
@@ -51,6 +54,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,6 +67,7 @@ public class AnalyserMessageServlet extends HttpServlet {
     private String STOP_WORD = "/Users/user/Dropbox/MasterM1_DECOL/Semestre02/ProjetTER/TER_NLP/source/motvides.txt";
     private String IN_MODEL = "/Users/user/Downloads/TER/test/boolean/Avec1Forums/kmeans.model";
     private String ARFF_BASE = "/Users/user/Downloads/TER/test/boolean/Avec1Forums/CategorizeUserForum06052014031750bool.arff";
+    private String NEIGHBOR = "/Users/user/Downloads/TER/test/boolean/Avec1Forums/forumsBelongUserProche.txt";
 
     /**
      * Constructeur de la classe DateServlet
@@ -75,7 +80,7 @@ public class AnalyserMessageServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String message = request.getParameter("message");
-
+        HttpSession session = request.getSession();
         //create file message
         try {
             OutputStreamUtils.writeSimple(message.toLowerCase(), ROOT_PATH + "message.txt");
@@ -125,26 +130,56 @@ public class AnalyserMessageServlet extends HttpServlet {
 
             Instances data = new Instances(WekaUtils.loadARFF(ROOT_PATH + "message_arff.arff"));
 
-            int[] clusters = kmeans.getAssignments();
             Instances clusterCentroid = kmeans.getClusterCentroids();
 
             double dist = Double.MAX_VALUE;
             int cluster_current = -99;
-            for (int i = 0; i < clusters.length; i++) {
-                int ind = clusters[i];
-                double newDist = eclidean.distance(clusterCentroid.instance(ind), data.instance(0));
+
+            for (int i = 0; i < clusterCentroid.numInstances(); i++) {
+                System.out.println("cluster:" + i);
+                double newDist = eclidean.distance(clusterCentroid.instance(i), data.instance(0));
                 if (newDist < dist) {
-                    cluster_current = ind;
-                    newDist = dist;
+                    cluster_current = i;
+                    dist = newDist;
                 }
             }
             // chercher les 10 profil
-            System.out.println("cluster_current:"+cluster_current);
+            System.out.println("cluster_current:" + cluster_current);
+
+            boolean findUsers = false;
+            List<Integer> idUsers = new ArrayList<Integer>();
+            for (String line : InputStreamUtils.readByLine(NEIGHBOR)) {
+                if (!"".equals(line)) {
+                    String values[] = line.split(":");
+
+                    if(!findUsers && values[0].equalsIgnoreCase("Cluster")){
+                        if(cluster_current == Integer.parseInt(values[1])){
+                            findUsers = true;
+                        }
+                    }else{
+
+                        if(findUsers && values[0].equalsIgnoreCase("id_user")){
+                            idUsers.add(Integer.parseInt(values[1].trim()));
+                        }
+
+                        if(findUsers && values[0].equalsIgnoreCase("Cluster")){
+                            break;
+                        }
+                    }
+
+                }
+
+            }
+
+            AbstractBusiness business = new ForumBusinness();
+            session.setAttribute("LIST_USERS",business.findUsersByIDs(idUsers));
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            //FileUtils.removeFile(ROOT_PATH + "message.txt");
-            //FileUtils.removeFile(ROOT_PATH + "message_lemma.txt");
+            FileUtils.removeFile(ROOT_PATH + "message.txt");
+            FileUtils.removeFile(ROOT_PATH + "message_lemma.txt");
+            FileUtils.removeFile(ROOT_PATH + "message_arff.arff");
         }
         response.sendRedirect("/CategorizeUserForum/results.jsp");
     }

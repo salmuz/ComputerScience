@@ -38,6 +38,7 @@
 
 package org.montp2.m1decol.ter.data;
 
+import org.montp2.m1decol.ter.data.beans.Author;
 import org.montp2.m1decol.ter.data.exception.JDBCException;
 
 import java.sql.Connection;
@@ -78,5 +79,7 @@ public abstract class JDBCAbstract{
     public abstract List<String> forumsBelongUsers(List<Integer> users) throws JDBCException;
 
     public abstract List<String> percentForumsByUsers(List<Integer> users) throws JDBCException;
+
+    public abstract List<Author> findUsersByIDs(List<Integer> idUsers) throws JDBCException;
 
 }

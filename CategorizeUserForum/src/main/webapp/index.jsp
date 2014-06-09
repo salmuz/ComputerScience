@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8" />
-	<title>Accueil</title>
-	
 
-	<link rel="stylesheet" type="text/css" href="./styles.css" />
+	<title>Accueil</title>
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
 
 <style>
 @font-face {
@@ -26,7 +24,7 @@
 
 <body>
 	<div id="wrap">
-		<h1>Système De Recommandation D'Amis</h1>
+		<h1>Systeme De Recommandation D'Amis</h1>
 		<div id='form_wrap'>
 			
 			<FORM METHOD="POST" ACTION="AnalyserMessageServlet">

@@ -40,6 +40,7 @@ package org.montp2.m1decol.ter.business;
 
 import org.montp2.m1decol.ter.business.exception.BusinessException;
 import org.montp2.m1decol.ter.data.JDBCAbstract;
+import org.montp2.m1decol.ter.data.beans.Author;
 import org.montp2.m1decol.ter.data.exception.JDBCException;
 import org.montp2.m1decol.ter.utils.Constants;
 
@@ -84,6 +85,15 @@ public class ForumBusinness extends AbstractBusiness {
     public List<String> percentForumsByUsers(List<Integer> users) throws BusinessException {
         try {
             return jdbc.percentForumsByUsers(users);
+        } catch (JDBCException e) {
+            throw new BusinessException(e);
+        }
+    }
+
+    @Override
+    public List<Author> findUsersByIDs(List<Integer> users) throws BusinessException {
+        try {
+            return jdbc.findUsersByIDs(users);
         } catch (JDBCException e) {
             throw new BusinessException(e);
         }

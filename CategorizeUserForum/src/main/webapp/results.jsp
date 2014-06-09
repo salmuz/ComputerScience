@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+<%@ page import="org.montp2.m1decol.ter.data.beans.Author" %>
+<%@ page import="java.util.List" %>
+<%@page contentType="text/html"%>
 <html>
 <head>
-	<meta charset="utf-8" />
-	<title>Résultats</title>
-	
 
+	<title>Resultats</title>
 	<link rel="stylesheet" type="text/css" href="./styles.css" />
 
 <style>
@@ -23,23 +23,26 @@
 </head>
 <body>
 	<div id="wrap2">
-		<h1>Résultats</h1>
+		<h1>Resultats</h1>
 		<div id='form_wrap2'>
 			<dl>
-				<dt><p>Utilisateur 1</p><img src="images/user.png" ALIGN="right" height="20%" width="20%"></dt>  
-				<dd>Information sur l'utilisateur</dd> 
-				<input type="button" value="Visiter Profil">
-				<hr color="#b3aba1">
-				<dt><p>Utilisateur 2</p><img src="images/user.png" ALIGN="right" height="20%" width="20%"></dt>  
-				<dd>Information sur l'utilisateur</dd> 
-				<input type="button" value="Visiter Profil">
-				<hr color="#b3aba1">
-				<dt><p>Utilisateur 3</p><img src="images/user.png" ALIGN="right" height="20%" width="20%"></dt>  
-				<dd>Information sur l'utilisateur</dd> 
-				<input type="button" value="Visiter Profil">
-                <input type="button" value="back" onclick="history.back()" />
+                <% List<Author> authors = (List<Author>) session.getAttribute("LIST_USERS");
+                   for (int i = 0; i < authors.size(); i++) {
+                       Author a = authors.get(i);
+                %>
+                    <dt>
+                        <img src="images/user.png" ALIGN="right" height="15%" width="20%">
+                        <p><%=a.getPseudonymAut()%></p>
+                    </dt>
+                    <dd><%=a.getRankAut()%></dd>
+                    <br/>
+                    <a href="<%=a.getProfileLinkAut()%>">Visiter Profil"</a>
+                    <br/>
+                    <hr color="#b3aba1">
+                <% } %>
 			</dl> 
 		</div>
+
 		
 	</div>
 	
